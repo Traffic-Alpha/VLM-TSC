@@ -5,7 +5,7 @@
 + State Design: Last step occupancy for each movement
 + Action Design: Choose Next Phase 
 + Reward Design: Total Waiting Time
-LastEditTime: 2025-01-15 16:47:30
+LastEditTime: 2025-01-15 17:14:17
 '''
 import os
 import torch
@@ -14,8 +14,8 @@ from tshub.utils.get_abs_path import get_abs_path
 from tshub.utils.init_log import set_logger
 
 from utils.make_tsc_env import make_env
+from utils.custom_models import CustomModel
 from utils.sb3_utils import VecNormalizeCallback, linear_schedule
-from benchmark.traffic_light.single_agent.utils.custom_models import CustomModel
 
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
@@ -41,7 +41,7 @@ if __name__ == '__main__':
     # #########
     sumo_cfg = path_convert("../map/single_junction.sumocfg")
     params = {
-        'tls_id':'J4',
+        'tls_id':'htddj_gsndj',
         'num_seconds':700,
         'sumo_cfg':sumo_cfg,
         'use_gui':False,
