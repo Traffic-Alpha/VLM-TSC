@@ -1,7 +1,7 @@
 '''
 Author: Maonan Wang
 Date: 2025-01-13 19:06:10
-LastEditTime: 2025-01-13 19:08:44
+LastEditTime: 2025-01-13 19:40:39
 LastEditors: Maonan Wang
 Description: Run the simulation in 3D and get 
 FilePath: /VLM-TSC/sim_3d.py
@@ -34,7 +34,7 @@ if __name__ == '__main__':
         debugr_spin_camera=True,
         sensor_config={
             'tls': ['junction_front_all']
-        }
+        } # 需要渲染的图像
     )
 
     for _ in range(10):
