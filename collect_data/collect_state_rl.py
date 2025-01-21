@@ -1,12 +1,12 @@
 '''
 Author: Maonan Wang
 Date: 2025-01-16 18:51:18
-LastEditTime: 2025-01-16 19:49:03
+LastEditTime: 2025-01-21 19:49:27
 LastEditors: Maonan Wang
 Description: 加载 Vector State RL 模型, 控制信号的, 但是显示 Image
 1. 定义一个环境，可以返回 state, 包括 vector 和 pixel
-2. load model, 根据 vector state 返回 action
-3. 保存 (pixel, action)
+2. load model, 根据 vector state 返回 action / 可以替换为 random policy, 收集更多数据
+3. 保存 (pixel, env_info)
 FilePath: /VLM-TSC/collect_data/collect_state_rl.py
 '''
 import os
@@ -16,9 +16,12 @@ from stable_baselines3 import PPO
 
 from tshub.utils.get_abs_path import get_abs_path
 from tshub.utils.init_log import set_logger
+from tshub.utils.format_dict import save_str_to_json
 
 from utils.tsc_env3d import TSCEnvironment3D
 from utils.tsc_wrapper import TSCEnvWrapper
+
+from collect_data.parse_state import get_direction_info
 
 def convert_rgb_to_bgr(image):
     # Convert an RGB image to BGR
@@ -50,7 +53,8 @@ if __name__ == '__main__':
     tls_id = 'htddj_gsndj'
     sumo_cfg = path_convert("../map/single_junction.sumocfg")
     scenario_glb_dir = path_convert(f"../map/3d_assets")
-    camera_dir = path_convert(f"./camera_output/")
+    camera_dir = path_convert(f"./qa_dataset/camera_output/")
+    json_dir = path_convert(f"./qa_dataset/json/")
 
     # 1. Load Model
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -62,8 +66,8 @@ if __name__ == '__main__':
         tls_id=tls_id,
         scenario_glb_dir=scenario_glb_dir,
         num_seconds=300,
-        sumo_cfg=sumo_cfg, 
-        use_gui=False,
+        sumo_cfg=sumo_cfg,
+        use_gui=True,
     )
 
     # Interact with Environment
@@ -76,10 +80,17 @@ if __name__ == '__main__':
         states, rewards, truncated, dones, infos = tsc_env.step(action=action)
         rl_state, camera_data = states['rl_state'], states['pixel']
 
+        # info 包含环境完整的信息, 用于转换为 json
+        direction_infos = get_direction_info(tls_id, infos)
+
+        # pixel 为当前对应的图片信息
         for i, camera_data in enumerate(camera_data):
             image_path = os.path.join(camera_dir, f"{step_idx}_{i}.png")
             cv2.imwrite(image_path, convert_rgb_to_bgr(camera_data))
-        
+
+            json_path = os.path.join(json_dir, f"{step_idx}_{i}.json")
+            save_str_to_json(direction_infos[i], json_path)
+
         step_idx += 1
         
     tsc_env.close()

@@ -1,7 +1,7 @@
 '''
 Author: Maonan Wang
 Date: 2025-01-15 18:33:20
-LastEditTime: 2025-01-16 19:30:54
+LastEditTime: 2025-01-21 18:18:30
 LastEditors: Maonan Wang
 Description: TSC Wrapper for ENV 3D
 + state: 四个方向的图片
@@ -86,10 +86,10 @@ class TSCEnvWrapper(gym.Wrapper):
             total_waiting_time += veh_info['waiting_time']
         return -total_waiting_time
     
-    def info_wrapper(self, infos):
-        """将 info 转换为 dict
+    def info_wrapper(self, infos, raw_state):
+        """将 info 转换为 dict, 包含环境详细的信息
         """
-        infos['other'] = None
+        infos['state'] = raw_state['state'].copy()
         return infos
     
     # ###########
@@ -120,7 +120,7 @@ class TSCEnvWrapper(gym.Wrapper):
 
         avg_occupancy = self.occupancy.calculate_average()
         rewards = self.reward_wrapper(states=states)
-        infos = self.info_wrapper(infos) # info 需要转换为一个 dict
+        infos = self.info_wrapper(infos=infos, raw_state=states) # info 需要转换为一个 dict
         self.states.append(avg_occupancy)
         rl_state = self.get_state() # 得到 state
 
