@@ -1,7 +1,7 @@
 '''
 Author: Maonan Wang
 Date: 2025-01-15 18:33:20
-LastEditTime: 2025-01-21 18:18:30
+LastEditTime: 2025-01-22 18:27:56
 LastEditors: Maonan Wang
 Description: TSC Wrapper for ENV 3D
 + state: 四个方向的图片
@@ -9,6 +9,7 @@ Description: TSC Wrapper for ENV 3D
 + reward: 路口总的 waiting time
 FilePath: /VLM-TSC/collect_data/utils/tsc_wrapper.py
 '''
+import copy
 import numpy as np
 import gymnasium as gym
 from gymnasium.core import Env
@@ -89,7 +90,7 @@ class TSCEnvWrapper(gym.Wrapper):
     def info_wrapper(self, infos, raw_state):
         """将 info 转换为 dict, 包含环境详细的信息
         """
-        infos['state'] = raw_state['state'].copy()
+        infos['state'] = copy.deepcopy(raw_state['state'])
         return infos
     
     # ###########
@@ -106,8 +107,10 @@ class TSCEnvWrapper(gym.Wrapper):
         # 处理路口动态信息
         pixel, occupancy, can_perform_action = self.state_wrapper(state=state)
         self.states.append(occupancy)
-        state = self.get_state()
-        return pixel, state, {'step_time':0}
+        rl_state = self.get_state()
+
+        info = self.info_wrapper(infos={'step_time':0}, raw_state=state)
+        return pixel, rl_state, info
 
     def step(self, action: int):
         can_perform_action = False
