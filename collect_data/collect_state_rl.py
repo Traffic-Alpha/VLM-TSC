@@ -1,7 +1,7 @@
 '''
 Author: Maonan Wang
 Date: 2025-01-16 18:51:18
-LastEditTime: 2025-01-21 19:49:27
+LastEditTime: 2025-01-22 18:28:24
 LastEditors: Maonan Wang
 Description: 加载 Vector State RL 模型, 控制信号的, 但是显示 Image
 1. 定义一个环境，可以返回 state, 包括 vector 和 pixel
@@ -21,7 +21,7 @@ from tshub.utils.format_dict import save_str_to_json
 from utils.tsc_env3d import TSCEnvironment3D
 from utils.tsc_wrapper import TSCEnvWrapper
 
-from collect_data.parse_state import get_direction_info
+from collect_data.parse_state import TrafficState2DICT
 
 def convert_rgb_to_bgr(image):
     # Convert an RGB image to BGR
@@ -73,7 +73,9 @@ if __name__ == '__main__':
     # Interact with Environment
     dones = False
     step_idx = 0
-    pixel, rl_state, _ = tsc_env.reset()
+    pixel, rl_state, infos = tsc_env.reset()
+    traffic_state_to_dict = TrafficState2DICT(tls_id, infos) # 特征转换器
+
     while not dones:
         action, _ = model.predict(rl_state, deterministic=True)
         action = step_idx % 4
@@ -81,7 +83,7 @@ if __name__ == '__main__':
         rl_state, camera_data = states['rl_state'], states['pixel']
 
         # info 包含环境完整的信息, 用于转换为 json
-        direction_infos = get_direction_info(tls_id, infos)
+        direction_infos = traffic_state_to_dict(infos)
 
         # pixel 为当前对应的图片信息
         for i, camera_data in enumerate(camera_data):
