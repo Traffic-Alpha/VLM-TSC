@@ -1,7 +1,7 @@
 '''
 Author: Maonan Wang
 Date: 2025-01-15 18:33:20
-LastEditTime: 2025-01-22 18:27:56
+LastEditTime: 2025-03-28 16:43:13
 LastEditors: Maonan Wang
 Description: TSC Wrapper for ENV 3D
 + state: 四个方向的图片
@@ -12,9 +12,9 @@ FilePath: /VLM-TSC/collect_data/utils/tsc_wrapper.py
 import copy
 import numpy as np
 import gymnasium as gym
+from typing import List
 from gymnasium.core import Env
 from collections import deque
-from typing import Any, SupportsFloat, Tuple, Dict, List
 
 class OccupancyList:
     def __init__(self) -> None:
@@ -71,13 +71,25 @@ class TSCEnvWrapper(gym.Wrapper):
         occupancy = vector[self.tls_id]['last_step_occupancy']
         can_perform_action = vector[self.tls_id]['can_perform_action']
         
-        junction_pixel = np.zeros((4, 240, 360, 3), dtype=np.uint8)
-        if (pixel is not None) and (can_perform_action):
-            # 将 4 个方向的图像合并在一起
-            for i, (_, image) in enumerate(pixel.items()):
-                junction_pixel[i] = image['junction_front_all']
+        junction_front_all = np.zeros((4, 1080, 1920, 3), dtype=np.uint8)
+        aircraft_images = np.zeros((1080, 1920, 3), dtype=np.uint8)
 
-        return junction_pixel, occupancy, can_perform_action
+        if (pixel is not None) and (can_perform_action): # 只有在 can perform action 的时候才会返回图像
+            for i, (_, image) in enumerate(pixel.items()):
+                # 保存 junction_front_all 的原始数据
+                if "junction_front_all" in image:
+                    junction_front_all[i] = image['junction_front_all']
+                # 检查是否有 aircraft_all 数据并保存
+                elif 'aircraft_all' in image:
+                    aircraft_images = image['aircraft_all']
+        
+        # 最终输出的图像
+        output_pixel = {
+            'junction_front_all': junction_front_all,
+            'aircraft_all': aircraft_images
+        }
+
+        return output_pixel, occupancy, can_perform_action
     
     def reward_wrapper(self, states) -> float:
         """返回整个路口的排队长度的平均值
@@ -90,7 +102,7 @@ class TSCEnvWrapper(gym.Wrapper):
     def info_wrapper(self, infos, raw_state):
         """将 info 转换为 dict, 包含环境详细的信息
         """
-        infos['state'] = copy.deepcopy(raw_state['state'])
+        infos['state'] = copy.deepcopy( ['state']) # 复制当前环境的 state
         return infos
     
     # ###########
@@ -116,6 +128,15 @@ class TSCEnvWrapper(gym.Wrapper):
         can_perform_action = False
         while not can_perform_action:
             action = {self.tls_id: action} # 构建单路口 action 的动作
+            # TODO, 首先有一定的改良修改 state
+            # TODO, 新的 state 需要配合对于 vehicle 停止在道路中进行使用
+
+            # 判断当前是否有事故, 如果没有事故则进行 sample
+            # 随机选择一辆 25m 内的车辆，返回车辆 id，同时 sample 一个 15-30s 的事故持续时间
+            # 利用 traci 将车辆设置为 stop
+            # 在这个车辆附近再添加一辆新的车辆，但是需要重合
+            # 如果当前存在事故且持续时间达到, 则去掉 stop 车辆，和新添加的车辆
+            
             states, rewards, truncated, dones, infos = super().step(action) # 与环境交互
             pixel, occupancy, can_perform_action = self.state_wrapper(state=states) # 只需要最后一个时刻的图像
             # 记录每一时刻的数据

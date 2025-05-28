@@ -1,46 +1,37 @@
 '''
 Author: Maonan Wang
-Date: 2025-01-15 16:53:53
-LastEditTime: 2025-03-31 16:13:10
+Date: 2025-03-31 16:11:07
+LastEditTime: 2025-04-01 10:32:26
 LastEditors: Maonan Wang
-Description: 信号灯控制环境 3D
-FilePath: /VLM-TSC/collect_data/utils/tsc_env3d.py
+Description: 信号灯控制游戏
+FilePath: /VLM-TSC/human_control_game/utils/game_env.py
 '''
 import gymnasium as gym
 
 from typing import List, Dict, Callable, Any
 from tshub.tshub_env3d.tshub_env3d import Tshub3DEnvironment
 
-class TSCEnvironment3D(gym.Env):
+class TSCEnvironmentGame3D(gym.Env):
     def __init__(
             self, 
             sumo_cfg:str, net_file:str,
+            trip_info:str, summary:str, statistic_output:str,
             scenario_glb_dir:str, 
             num_seconds:int, 
             tls_ids:List[str], tls_action_type:str, 
-            preset="1080P", resolution=0.5,
+            preset="720P", resolution=0.5,
             use_gui:bool=False,
             modify_states_func:Callable[[Any], Any]=None # 用于修改 state, 制造车祸或是噪声
         ) -> None:
         super().__init__()
-
-        aircraft_inits = {
-            'a1': {
-                "aircraft_type": "drone",
-                "action_type": "stationary", # 固定位置
-                "position":(1781.39, 933.12, 100), "speed":0, "heading":(0,0,0), # 初始信息
-                "communication_range":100, 
-                "if_sumo_visualization":True, "img_file":None,
-                "custom_update_cover_radius":None # 使用自定义的计算
-            }
-        }
         
         self.tsc_env = Tshub3DEnvironment(
             sumo_cfg=sumo_cfg,
             net_file=net_file,
             scenario_glb_dir=scenario_glb_dir,
-            is_aircraft_builder_initialized=True, # 用于获得路口俯视角度的画面
-            aircraft_inits=aircraft_inits,
+            trip_info=trip_info, summary=summary, statistic_output=statistic_output, # 存储性能比较
+            tripinfo_output_unfinished=True,
+            is_aircraft_builder_initialized=False,
             is_vehicle_builder_initialized=True, # 用于获得 vehicle 的 waiting time 来计算 reward
             is_traffic_light_builder_initialized=True,
             is_map_builder_initialized=True,
@@ -57,11 +48,8 @@ class TSCEnvironment3D(gym.Env):
             debuger_print_node=False,
             debuger_spin_camera=False,
             sensor_config={
-                'aircraft': {
-                    "a1": {"sensor_types": ['aircraft_all']}
-                },
                 'tls': {
-                    tls_ids[0]: {
+                    tls_ids[0]: { # 获得一个路口的信息
                         "tls_camera_height": 15,
                         "sensor_types":["junction_front_all"]
                     }

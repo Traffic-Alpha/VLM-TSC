@@ -34,7 +34,9 @@
 -->
 
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
-    <vType id="background" length="5.00" color="155,89,182" tau="1.0"/>
+    <vType id="background" length="8.500" color="155,89,182" tau="1.0"/>
+    <vType id="ego" length="8.500" color="26,188,156" accel="1" decel="1" tau="1.0"/>
+
     <vehicle id="gsndj_s4__0__background.0" type="background" depart="0.84" departLane="random">
         <route edges="gsndj_s4 161701303#10"/>
     </vehicle>
@@ -50,7 +52,6 @@
     <vehicle id="161701303#7.248__0__background.0" type="background" depart="5.99" departLane="random">
         <route edges="161701303#7.248 gsndj_s5"/>
     </vehicle>
-    <vType id="ego" length="5.00" color="26,188,156" accel="1" decel="1" tau="1.0"/>
     <vehicle id="29257863#2__0__ego.0" type="ego" depart="6.54" departLane="random">
         <route edges="29257863#2 29257863#5"/>
     </vehicle>

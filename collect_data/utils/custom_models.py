@@ -1,4 +1,12 @@
 '''
+Author: Maonan Wang
+Date: 2025-03-20 04:54:56
+LastEditTime: 2025-03-20 04:54:57
+LastEditors: Maonan Wang
+Description: Load Model 的时候需要加载模型
+FilePath: /VLM-TSC/collect_data/utils/custom_models.py
+'''
+'''
 @Author: WANG Maonan
 @Date: 2023-09-08 18:34:24
 @Description: Custom Model

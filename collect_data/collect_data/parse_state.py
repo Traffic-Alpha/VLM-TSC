@@ -1,7 +1,7 @@
 '''
 Author: Maonan Wang
 Date: 2025-01-21 18:37:24
-LastEditTime: 2025-01-22 18:29:19
+LastEditTime: 2025-03-20 05:14:20
 LastEditors: Maonan Wang
 Description: 获得图片对应的车辆信息
 - tls 获得 in_road_heading, 按从小到大顺序, 就是 Image 的顺序
@@ -12,7 +12,10 @@ FilePath: /VLM-TSC/collect_data/collect_data/parse_state.py
 '''
 class TrafficState2DICT:
     def __init__(self, tls_id: str, raw_infos):
-        """初始化类并计算不变的信息
+        """初始化类并计算不变的信息, 需要计算:
+        1. in road ids
+        2. out road ids
+        因为我们图像包含四个方向, 每一个方向包含 in road & out road, 需要匹配方向对应的车道
         """
         self.tls_id = tls_id
 
@@ -22,34 +25,35 @@ class TrafficState2DICT:
             tls_info['in_roads_heading'], 
             key=tls_info['in_roads_heading'].get
         )
-        self.sorted_out_road_ids = self._calculate_sorted_out_road_ids(tls_info)
+        self.sorted_out_road_ids = self.__calculate_sorted_out_road_ids(tls_info)
     
-    def __call__(self, raw_infos):
-        return self.get_direction_info(raw_infos)
-    
-    # -----
-    
-    def _calculate_sorted_out_road_ids(self, tls_info):
+    def __calculate_sorted_out_road_ids(self, tls_info):
         """计算并返回旋转后的 sorted_out_road_ids
         """
         out_roads_heading = tls_info['out_roads_heading']
         for out_road_id, angle in out_roads_heading.items():
             out_roads_heading[out_road_id] = (angle + 180) % 360
         return sorted(out_roads_heading, key=out_roads_heading.get)
+    
+    def __call__(self, raw_infos):
+        return self.get_direction_info(raw_infos)
+    
+    # -----
 
     def get_direction_info(self, raw_infos):
         """将 info 转换为每个方向的信息
         """
         tls_info = raw_infos['state']['tls'][self.tls_id]
         vehicle_info = raw_infos['state']['vehicle']
+        lane_info = raw_infos['state']['lane']
 
         direction_infos = {}
         for direction_idx, (_in_road_id, _out_road_id) in enumerate(zip(self.sorted_in_road_ids, self.sorted_out_road_ids)):
             _direction_info = {
                 'in_road': _in_road_id,
                 'out_road': _out_road_id,
-                'in_lanes': tls_info['roads_lanes'][_in_road_id],
-                'out_lanes': tls_info['roads_lanes'][_out_road_id],
+                'in_lanes': {_lane_id:lane_info[_lane_id]['length'] for _lane_id in tls_info['roads_lanes'][_in_road_id]},
+                'out_lanes': {_lane_id:lane_info[_lane_id]['length'] for _lane_id in tls_info['roads_lanes'][_out_road_id]},
                 'current_phase': tls_info['this_phase_index'],
                 'traffic_phase': tls_info['phase2movements'],
                 'vehicles': self._get_direction_vehicles(_in_road_id, _out_road_id, vehicle_info)
