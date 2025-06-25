@@ -1,8 +1,8 @@
 '''
 Author: Maonan Wang
 Date: 2025-01-15 16:53:53
-LastEditTime: 2025-03-31 16:13:10
-LastEditors: Maonan Wang
+LastEditTime: 2025-06-25 17:32:08
+LastEditors: WANG Maonan
 Description: 信号灯控制环境 3D
 FilePath: /VLM-TSC/collect_data/utils/tsc_env3d.py
 '''
@@ -18,29 +18,21 @@ class TSCEnvironment3D(gym.Env):
             scenario_glb_dir:str, 
             num_seconds:int, 
             tls_ids:List[str], tls_action_type:str, 
-            preset="1080P", resolution=0.5,
+            # 3D Rendering
+            preset="1080P", 
+            resolution=0.5,
             use_gui:bool=False,
+            aircraft_inits:Dict[str, Dict[str, Any]] = None, 
             modify_states_func:Callable[[Any], Any]=None # 用于修改 state, 制造车祸或是噪声
         ) -> None:
         super().__init__()
-
-        aircraft_inits = {
-            'a1': {
-                "aircraft_type": "drone",
-                "action_type": "stationary", # 固定位置
-                "position":(1781.39, 933.12, 100), "speed":0, "heading":(0,0,0), # 初始信息
-                "communication_range":100, 
-                "if_sumo_visualization":True, "img_file":None,
-                "custom_update_cover_radius":None # 使用自定义的计算
-            }
-        }
         
         self.tsc_env = Tshub3DEnvironment(
             sumo_cfg=sumo_cfg,
-            net_file=net_file,
+            net_file=net_file, # 需要 network 获得路网拓扑, 从而输出 JSON 文件
             scenario_glb_dir=scenario_glb_dir,
             is_aircraft_builder_initialized=True, # 用于获得路口俯视角度的画面
-            aircraft_inits=aircraft_inits,
+            aircraft_inits=aircraft_inits, # 飞行器信息, 用于获得路口的俯视信息
             is_vehicle_builder_initialized=True, # 用于获得 vehicle 的 waiting time 来计算 reward
             is_traffic_light_builder_initialized=True,
             is_map_builder_initialized=True,
@@ -56,6 +48,7 @@ class TSCEnvironment3D(gym.Env):
             render_mode="offscreen", # 如果设置了 use_render_pipeline, 此时只能是 onscreen
             debuger_print_node=False,
             debuger_spin_camera=False,
+            should_count_vehicles=True, # 额外返回场景内车辆位置信息, 用于渲染
             sensor_config={
                 'aircraft': {
                     "a1": {"sensor_types": ['aircraft_all']}
@@ -72,15 +65,20 @@ class TSCEnvironment3D(gym.Env):
 
     def reset(self):
         state_infos = self.tsc_env.reset()
-        new_state = {'state': state_infos, 'pixel': None}
+        new_state = {'state': state_infos, 'pixel': None, 'veh_3d_elements':None}
         return new_state
         
     def step(self, action:Dict[str, Dict[str, int]]):
-        action = {'tls': action} # 这里只控制 tls 即可
-        states, rewards, infos, dones, sensor_data = self.tsc_env.step(action)
+        action = {
+            'vehicle': dict(), 
+            'tls': action
+        } # 这里只控制 tls 即可
+        states, rewards, infos, dones, sensor_datas = self.tsc_env.step(action)
+        sensor_data = sensor_datas['image'] # 获得图片数据
+        vehicle_elements = sensor_datas['veh_elements'] # 车辆数据
         truncated = dones
 
-        new_state = {'state': states, 'pixel': sensor_data}
+        new_state = {'state': states, 'pixel': sensor_data, 'veh_3d_elements':vehicle_elements}
         return new_state, rewards, truncated, dones, infos
     
     def close(self) -> None:
