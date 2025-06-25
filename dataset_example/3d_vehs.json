@@ -1,0 +1,245 @@
+{
+    "1200878753#0__0__background.0": {
+        "pos": [
+            191.17638443067494,
+            194.756739499544,
+            0.0
+        ],
+        "heading": 1.7070828031176521,
+        "model": "background/vehicle_white.glb"
+    },
+    "1200878753#0__0__background.1": {
+        "pos": [
+            198.6665294253472,
+            195.7839124280509,
+            0.0
+        ],
+        "heading": 1.7070828031176521,
+        "model": "background/vehicle_white.glb"
+    },
+    "1200878753#0__0__background.2": {
+        "pos": [
+            190.2009237036664,
+            201.08547446613042,
+            0.0
+        ],
+        "heading": 1.7073253348018813,
+        "model": "background/vehicle_pink.glb"
+    },
+    "1200878753#0__0__background.3": {
+        "pos": [
+            190.70835581031454,
+            197.9256384819411,
+            0.0
+        ],
+        "heading": 1.7070828031176521,
+        "model": "background/vehicle_white.glb"
+    },
+    "1200878753#0__0__background.4": {
+        "pos": [
+            198.1378808819244,
+            198.94449820103185,
+            0.0
+        ],
+        "heading": 1.7070828031176468,
+        "model": "background/vehicle_pink.glb"
+    },
+    "1200878753#0__0__background.5": {
+        "pos": [
+            197.57565763099376,
+            202.09864261925532,
+            0.0
+        ],
+        "heading": 1.7073253348018858,
+        "model": "background/vehicle_blue.glb"
+    },
+    "1200878753#0__0__background.6": {
+        "pos": [
+            206.15349854916863,
+            196.8329199510742,
+            0.0
+        ],
+        "heading": 1.7159083656360474,
+        "model": "background/vehicle_white.glb"
+    },
+    "30658263#0__0__background.7": {
+        "pos": [
+            157.11883142412572,
+            284.13645171719315,
+            0.0
+        ],
+        "heading": 0.17530979762702703,
+        "model": "background/vehicle_white.glb"
+    },
+    "1200878753#0__0__background.7": {
+        "pos": [
+            205.56448710942115,
+            199.98407549427083,
+            0.0
+        ],
+        "heading": 1.7154517153260986,
+        "model": "background/vehicle_blue.glb"
+    },
+    "102454134#0__0__background.2": {
+        "pos": [
+            154.00490488085802,
+            205.86856265661044,
+            0.0
+        ],
+        "heading": -1.4239649928587372,
+        "model": "background/vehicle_pink.glb"
+    },
+    "1200878753#0__0__background.8": {
+        "pos": [
+            204.94768032578415,
+            203.13086829634346,
+            0.0
+        ],
+        "heading": 1.7150250888553842,
+        "model": "background/suv_grey.glb"
+    },
+    "102454134#0__0__background.3": {
+        "pos": [
+            154.51479981120127,
+            202.71050700411806,
+            0.0
+        ],
+        "heading": -1.4245012606430913,
+        "model": "background/vehicle_white.glb"
+    },
+    "30658263#0__0__background.8": {
+        "pos": [
+            277.15917133516524,
+            247.75084505736697,
+            0.0
+        ],
+        "heading": -0.5871345482100523,
+        "model": "background/suv_blue.glb"
+    },
+    "102454134#0__0__background.4": {
+        "pos": [
+            155.024940458608,
+            199.55247381343065,
+            0.0
+        ],
+        "heading": -1.425035403291833,
+        "model": "background/vehicle_pink.glb"
+    },
+    "102454134#0__0__background.5": {
+        "pos": [
+            146.60380104086317,
+            204.64540532547898,
+            0.0
+        ],
+        "heading": -1.3985338284183593,
+        "model": "background/vehicle_white.glb"
+    },
+    "1200878753#0__0__background.9": {
+        "pos": [
+            212.97935372833896,
+            201.10332818413787,
+            0.0
+        ],
+        "heading": 1.723191061908441,
+        "model": "background/suv_blue.glb"
+    },
+    "30658263#0__0__background.9": {
+        "pos": [
+            145.86420266491626,
+            311.5055435136998,
+            0.0
+        ],
+        "heading": 0.17006777369138604,
+        "model": "background/vehicle_pink.glb"
+    },
+    "102454134#0__0__background.6": {
+        "pos": [
+            147.11506586580077,
+            201.48829582947528,
+            0.0
+        ],
+        "heading": -1.3984108042340022,
+        "model": "background/vehicle_pink.glb"
+    },
+    "30658263#0__0__background.10": {
+        "pos": [
+            170.57909544749205,
+            185.61625141327968,
+            0.0
+        ],
+        "heading": 0.1382298612915429,
+        "model": "background/vehicle_blue.glb"
+    },
+    "960661806#0__0__background.5": {
+        "pos": [
+            175.6368991854291,
+            219.8098646553048,
+            0.0
+        ],
+        "heading": -2.97426732707516,
+        "model": "background/vehicle_blue.glb"
+    },
+    "102454134#0__0__background.7": {
+        "pos": [
+            139.20333721877708,
+            203.3578215932694,
+            0.0
+        ],
+        "heading": -1.3985338284183584,
+        "model": "background/vehicle_pink.glb"
+    },
+    "30658263#0__0__background.11": {
+        "pos": [
+            176.46419433722147,
+            149.66107688642322,
+            0.0
+        ],
+        "heading": 0.16401980361422996,
+        "model": "background/vehicle_blue.glb"
+    },
+    "30658263#0__0__background.12": {
+        "pos": [
+            184.56433493003743,
+            120.31308265360575,
+            0.0
+        ],
+        "heading": 0.16411942713893968,
+        "model": "background/vehicle_white.glb"
+    },
+    "102454134#0__0__background.8": {
+        "pos": [
+            130.00562688752737,
+            198.5093090039721,
+            0.0
+        ],
+        "heading": -1.3984108042340022,
+        "model": "background/suv_golden.glb"
+    },
+    "30658263#0__0__police.0": {
+        "pos": [
+            184.35173141615434,
+            102.00415835755862,
+            0.0
+        ],
+        "heading": 0.16401980361422996,
+        "model": "public_transport/police.glb"
+    },
+    "102454134#0__0__background.9": {
+        "pos": [
+            120.56949051674991,
+            193.61537547411515,
+            0.0
+        ],
+        "heading": -1.398246501106751,
+        "model": "background/vehicle_white.glb"
+    },
+    "30658263#0__0__background.13": {
+        "pos": [
+            189.33511233684354,
+            91.50560721201383,
+            0.0
+        ],
+        "heading": 0.16411942713893968,
+        "model": "background/vehicle_blue.glb"
+    }
+}

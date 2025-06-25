@@ -1,0 +1,88 @@
+{
+    "in_road": "102454134#0",
+    "out_road": "102640412#0",
+    "in_lanes": {
+        "102454134#0_0": 46.32,
+        "102454134#0_1": 46.32,
+        "102454134#0_2": 46.32
+    },
+    "out_lanes": {
+        "102640412#0_0": 23.46,
+        "102640412#0_1": 23.46
+    },
+    "current_phase": 1,
+    "traffic_phase": {
+        "0": [
+            "1200878753#0--l",
+            "1200878753#0--s"
+        ],
+        "1": [
+            "30658263#0--s",
+            "30658263#0--r"
+        ],
+        "2": [
+            "102454134#0--s"
+        ],
+        "3": [
+            "960661806#0--s"
+        ]
+    },
+    "vehicles": {
+        "102454134#0__0__background.2": {
+            "vehicle_type": "background",
+            "road_id": "102454134#0",
+            "lane_id": "102454134#0_2",
+            "lane_position": 45.31899801116703,
+            "event": null
+        },
+        "102454134#0__0__background.3": {
+            "vehicle_type": "background",
+            "road_id": "102454134#0",
+            "lane_id": "102454134#0_1",
+            "lane_position": 45.31896099498943,
+            "event": null
+        },
+        "102454134#0__0__background.4": {
+            "vehicle_type": "background",
+            "road_id": "102454134#0",
+            "lane_id": "102454134#0_0",
+            "lane_position": 45.31895648180085,
+            "event": null
+        },
+        "102454134#0__0__background.5": {
+            "vehicle_type": "background",
+            "road_id": "102454134#0",
+            "lane_id": "102454134#0_2",
+            "lane_position": 37.81798786409665,
+            "event": null
+        },
+        "102454134#0__0__background.6": {
+            "vehicle_type": "background",
+            "road_id": "102454134#0",
+            "lane_id": "102454134#0_1",
+            "lane_position": 37.81782939623186,
+            "event": null
+        },
+        "102454134#0__0__background.7": {
+            "vehicle_type": "background",
+            "road_id": "102454134#0",
+            "lane_id": "102454134#0_2",
+            "lane_position": 30.30806876322948,
+            "event": null
+        },
+        "102454134#0__0__background.8": {
+            "vehicle_type": "background",
+            "road_id": "102454134#0",
+            "lane_id": "102454134#0_1",
+            "lane_position": 20.45131376525387,
+            "event": null
+        },
+        "102454134#0__0__background.9": {
+            "vehicle_type": "background",
+            "road_id": "102454134#0",
+            "lane_id": "102454134#0_0",
+            "lane_position": 10.340028882957995,
+            "event": null
+        }
+    }
+}

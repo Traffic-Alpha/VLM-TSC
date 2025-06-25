@@ -1,0 +1,103 @@
+{
+    "in_road": "1200878753#0",
+    "out_road": "102640432#0",
+    "in_lanes": {
+        "1200878753#0_0": 67.16,
+        "1200878753#0_1": 67.16,
+        "1200878753#0_2": 67.16
+    },
+    "out_lanes": {
+        "102640432#0_0": 52.65,
+        "102640432#0_1": 52.65,
+        "102640432#0_2": 52.65
+    },
+    "current_phase": 1,
+    "traffic_phase": {
+        "0": [
+            "1200878753#0--l",
+            "1200878753#0--s"
+        ],
+        "1": [
+            "30658263#0--s",
+            "30658263#0--r"
+        ],
+        "2": [
+            "102454134#0--s"
+        ],
+        "3": [
+            "960661806#0--s"
+        ]
+    },
+    "vehicles": {
+        "1200878753#0__0__background.0": {
+            "vehicle_type": "background",
+            "road_id": "1200878753#0",
+            "lane_id": "1200878753#0_2",
+            "lane_position": 66.15897203103496,
+            "event": null
+        },
+        "1200878753#0__0__background.1": {
+            "vehicle_type": "background",
+            "road_id": "1200878753#0",
+            "lane_id": "1200878753#0_2",
+            "lane_position": 58.657872077045255,
+            "event": null
+        },
+        "1200878753#0__0__background.2": {
+            "vehicle_type": "background",
+            "road_id": "1200878753#0",
+            "lane_id": "1200878753#0_0",
+            "lane_position": 66.15895473155223,
+            "event": null
+        },
+        "1200878753#0__0__background.3": {
+            "vehicle_type": "background",
+            "road_id": "1200878753#0",
+            "lane_id": "1200878753#0_1",
+            "lane_position": 66.15892327927627,
+            "event": null
+        },
+        "1200878753#0__0__background.4": {
+            "vehicle_type": "background",
+            "road_id": "1200878753#0",
+            "lane_id": "1200878753#0_1",
+            "lane_position": 58.657920701575335,
+            "event": null
+        },
+        "1200878753#0__0__background.5": {
+            "vehicle_type": "background",
+            "road_id": "1200878753#0",
+            "lane_id": "1200878753#0_0",
+            "lane_position": 58.65790369849661,
+            "event": null
+        },
+        "1200878753#0__0__background.6": {
+            "vehicle_type": "background",
+            "road_id": "1200878753#0",
+            "lane_id": "1200878753#0_2",
+            "lane_position": 51.1568539806424,
+            "event": null
+        },
+        "1200878753#0__0__background.7": {
+            "vehicle_type": "background",
+            "road_id": "1200878753#0",
+            "lane_id": "1200878753#0_1",
+            "lane_position": 51.156907559422756,
+            "event": null
+        },
+        "1200878753#0__0__background.8": {
+            "vehicle_type": "background",
+            "road_id": "1200878753#0",
+            "lane_id": "1200878753#0_0",
+            "lane_position": 51.156870870289595,
+            "event": null
+        },
+        "1200878753#0__0__background.9": {
+            "vehicle_type": "background",
+            "road_id": "1200878753#0",
+            "lane_id": "1200878753#0_1",
+            "lane_position": 43.6558895169753,
+            "event": null
+        }
+    }
+}
