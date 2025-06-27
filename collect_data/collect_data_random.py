@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-06-25 16:45:03
 LastEditors: WANG Maonan
 Description: 使用随机策略收集信息
-LastEditTime: 2025-06-25 18:08:47
+LastEditTime: 2025-06-26 18:31:03
 '''
 import os
 import cv2
@@ -15,7 +15,7 @@ from tshub.utils.format_dict import save_str_to_json
 
 from utils.tsc_env3d import TSCEnvironment3D
 from utils.tsc_wrapper import TSCEnvWrapper
-from utils.save_vector import save_numpy_array
+from utils.save_vector import save_states
 
 from CONFIG import SCENARIO_CONFIGS
 from collect_data.parse_state import TrafficState2DICT # 将环境信息转换为 JSON
@@ -33,8 +33,10 @@ config = SCENARIO_CONFIGS.get(SCENARIO_NAME) # 获取特定场景的配置
 SUMOCFG = config["SUMOCFG"]
 NETFILE = config["NETFILE"]
 JUNCTION_NAME = config["JUNCTION_NAME"]
+NUM_SECONDS = config["NUM_SECONDS"] # 仿真时间
 CENTER_COORDINATES = config["CENTER_COORDINATES"]
 PHASE_NUMBER = config["PHASE_NUMBER"] # 绿灯相位数量
+MOVEMENT_NUMBER = config["MOVEMENT_NUMBER"] # 有效 movement 的数量
 
 # 初始化场景飞行器位置, 获得俯视角图像
 aircraft_inits = {
@@ -52,6 +54,7 @@ def make_env(
         tls_id:str, 
         sumo_cfg:str, net_file:str,
         scenario_glb_dir:str, 
+        movement_num:int, 
         num_seconds:int, use_gui:bool,
         aircraft_inits=None,
         preset:str="1080P", resolution:float=1,
@@ -68,7 +71,7 @@ def make_env(
         aircraft_inits=aircraft_inits,
         modify_states_func=None
     )
-    tsc_env = TSCEnvWrapper(tsc_env, tls_id=tls_id)
+    tsc_env = TSCEnvWrapper(tsc_env, tls_id=tls_id, movement_num=movement_num)
 
     return tsc_env
 
@@ -85,7 +88,8 @@ if __name__ == '__main__':
         sumo_cfg=sumo_cfg,
         net_file=net_file,
         scenario_glb_dir=scenario_glb_dir,
-        num_seconds=300,
+        movement_num=MOVEMENT_NUMBER,
+        num_seconds=NUM_SECONDS,
         use_gui=True,
         aircraft_inits=aircraft_inits,
         preset="480P",
@@ -110,11 +114,22 @@ if __name__ == '__main__':
         # 存储每一个时刻的数据
         # #################
         base_path = path_convert(f"../exp_dataset/{SCENARIO_NAME}/{step_idx}")
-        if not os.path.exists(base_path):
-            os.makedirs(base_path)
-        
-        # -> 存储 Vector
-        save_numpy_array(array=rl_state, file_path=os.path.join(base_path, "state_vector.json"))
+        low_quality_rgb_path = os.path.join(base_path, "low_quality_rgb")
+        annotations_path = os.path.join(base_path, "annotations") # 存储每一个方向对应的 JSON 文件
+
+        for _path in [base_path, low_quality_rgb_path, annotations_path]:
+            if not os.path.exists(_path):
+                os.makedirs(_path)
+
+        # -> 每个 step 的总体数据
+        step_infp = {
+            "time_step": infos['step_time'],
+            "action": action
+        }
+        save_str_to_json(step_infp, os.path.join(base_path, "step_info.json"))
+
+        # -> 存储 Vector (RL 的 state)
+        save_states(states=rl_state, filename=os.path.join(base_path, "state_vector.npy"))
 
         # -> 存储车辆数据
         save_str_to_json(veh_3d_elements, os.path.join(base_path, "3d_vehs.json"))
@@ -124,14 +139,15 @@ if __name__ == '__main__':
             # Iterate over each camera type
             for camera_type, image_array in cameras.items():
                 # Save the numpy array as an image
-                image_path = os.path.join(base_path, f"{element_id}_{camera_type}.png")
+                image_path = os.path.join(low_quality_rgb_path, f"{element_id}_{camera_type}.png")
                 cv2.imwrite(image_path, convert_rgb_to_bgr(image_array))
 
         # -> 存储每个方向的 JSON 数据
         for direction_idx, direction_info in direction_infos.items():
-            json_path = os.path.join(base_path, f"{direction_idx}.json")
+            json_path = os.path.join(annotations_path, f"{direction_idx}.json")
             save_str_to_json(direction_info, json_path)
 
+        # -> 存储 global info (time, action, 每个 timestep 包含的信息)
         step_idx += 1
         
     tsc_env.close()
