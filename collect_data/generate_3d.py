@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-06-25 18:21:04
 LastEditors: WANG Maonan
 Description: 精细化场景渲染
-LastEditTime: 2025-06-26 18:23:11
+LastEditTime: 2025-06-30 15:43:31
 '''
 import os
 import sys
@@ -17,7 +17,7 @@ from vis3d_blender_render import TimestepRenderer, VehicleManager
 # 配置文件路径
 START_TIMESTEP = 0 # 开始渲染的时间
 END_TIMESTEP = 68 # 结束渲染的时间
-MODELS_BASE_PATH = "/home/tshub/Code_Project/3_blender/3d_models/" # 需要渲染的模型
+MODELS_BASE_PATH = f"{tshub_path}/tshub/tshub_env3d/_assets_3d/vehicles/" # 需要渲染的模型
 SCENARIO_PATH = "/home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/exp_dataset/Hongkong_YMT/" # 场景所在的环境
 
 def main():
