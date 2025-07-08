@@ -3,10 +3,9 @@ Author: WANG Maonan
 Date: 2025-06-25 16:45:03
 LastEditors: WANG Maonan
 Description: 使用随机策略收集信息
-LastEditTime: 2025-06-26 18:31:03
+LastEditTime: 2025-07-08 17:38:27
 '''
 import os
-import cv2
 import random
 
 from tshub.utils.get_abs_path import get_abs_path
@@ -15,7 +14,6 @@ from tshub.utils.format_dict import save_str_to_json
 
 from utils.tsc_env3d import TSCEnvironment3D
 from utils.tsc_wrapper import TSCEnvWrapper
-from utils.save_vector import save_states
 
 from CONFIG import SCENARIO_CONFIGS
 from collect_data.parse_state import TrafficState2DICT # 将环境信息转换为 JSON
@@ -58,6 +56,7 @@ def make_env(
         num_seconds:int, use_gui:bool,
         aircraft_inits=None,
         preset:str="1080P", resolution:float=1,
+        base_path:str = None,
     ):
     tsc_env = TSCEnvironment3D(
         sumo_cfg=sumo_cfg,
@@ -71,7 +70,11 @@ def make_env(
         aircraft_inits=aircraft_inits,
         modify_states_func=None
     )
-    tsc_env = TSCEnvWrapper(tsc_env, tls_id=tls_id, movement_num=movement_num)
+    tsc_env = TSCEnvWrapper(
+        tsc_env, tls_id=tls_id, 
+        movement_num=movement_num,
+        base_path=base_path,
+    )
 
     return tsc_env
 
@@ -81,6 +84,7 @@ if __name__ == '__main__':
     sumo_cfg = path_convert(f"../exp_networks/{SCENARIO_NAME}/{SUMOCFG}.sumocfg")
     net_file = path_convert(f"../exp_networks/{SCENARIO_NAME}/env/{NETFILE}.net.xml")
     scenario_glb_dir = path_convert(f"../exp_networks/{SCENARIO_NAME}/3d_assets/")
+    base_path = base_path = path_convert(f"../exp_dataset/{SCENARIO_NAME}/") # 存储路径
     
     # Init Env
     tsc_env = make_env(
@@ -94,60 +98,26 @@ if __name__ == '__main__':
         aircraft_inits=aircraft_inits,
         preset="480P",
         resolution=1,
+        base_path=base_path,
     )
 
     # Interact with Environment
     dones = False
     step_idx = 0
-    rl_state, pixel, veh_3d_elements, infos = tsc_env.reset()
+    rl_state, pixel, infos = tsc_env.reset()
     traffic_state_to_dict = TrafficState2DICT(tls_id, infos) # 特征转换器
 
     while not dones:
         action = random.randint(0, PHASE_NUMBER-1)
         states, rewards, truncated, dones, infos = tsc_env.step(action=action)
-        rl_state, camera_data, veh_3d_elements = states['rl_state'], states['pixel'], states['veh_3d_elements']
-
-        # info 包含环境完整的信息, 用于转换为 json
-        direction_infos = traffic_state_to_dict(infos)
-
-        # #################
-        # 存储每一个时刻的数据
-        # #################
-        base_path = path_convert(f"../exp_dataset/{SCENARIO_NAME}/{step_idx}")
-        low_quality_rgb_path = os.path.join(base_path, "low_quality_rgb")
-        annotations_path = os.path.join(base_path, "annotations") # 存储每一个方向对应的 JSON 文件
-
-        for _path in [base_path, low_quality_rgb_path, annotations_path]:
-            if not os.path.exists(_path):
-                os.makedirs(_path)
-
-        # -> 每个 step 的总体数据
-        step_infp = {
-            "time_step": infos['step_time'],
-            "action": action
-        }
-        save_str_to_json(step_infp, os.path.join(base_path, "step_info.json"))
-
-        # -> 存储 Vector (RL 的 state)
-        save_states(states=rl_state, filename=os.path.join(base_path, "state_vector.npy"))
-
-        # -> 存储车辆数据
-        save_str_to_json(veh_3d_elements, os.path.join(base_path, "3d_vehs.json"))
-
-        # -> 存储传感器数据 (图片)
-        for element_id, cameras in camera_data.items():
-            # Iterate over each camera type
-            for camera_type, image_array in cameras.items():
-                # Save the numpy array as an image
-                image_path = os.path.join(low_quality_rgb_path, f"{element_id}_{camera_type}.png")
-                cv2.imwrite(image_path, convert_rgb_to_bgr(image_array))
-
-        # -> 存储每个方向的 JSON 数据
-        for direction_idx, direction_info in direction_infos.items():
-            json_path = os.path.join(annotations_path, f"{direction_idx}.json")
-            save_str_to_json(direction_info, json_path)
-
-        # -> 存储 global info (time, action, 每个 timestep 包含的信息)
-        step_idx += 1
+        rl_state, camera_data = states['rl_state'], states['pixel']
+    
+    # 存储全局信息
+    global_infos = {
+        "scenario_name": SCENARIO_NAME,
+        "tls_id": JUNCTION_NAME,
+        "can_perform_action": {**tsc_env.can_perform_action_infos}
+    }
+    save_str_to_json(global_infos, os.path.join(base_path, "global.json"))
         
     tsc_env.close()
