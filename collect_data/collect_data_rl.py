@@ -3,7 +3,7 @@ Author: Maonan Wang
 Date: 2025-01-16 18:51:18
 Description: 使用 RL 执行策略并收集信息
 LastEditors: WANG Maonan
-LastEditTime: 2025-07-10 20:29:26
+LastEditTime: 2025-07-10 20:40:48
 '''
 import os
 import torch
@@ -17,7 +17,6 @@ from utils.env_utils.make_env import make_env
 from utils.rl_utils.simple_int import IntersectionNet
 
 from CONFIG import SCENARIO_CONFIGS
-from collect_data.parse_state import TrafficState2DICT # 将环境信息转换为 JSON
  
 def convert_rgb_to_bgr(image):
     # Convert an RGB image to BGR
@@ -93,7 +92,6 @@ if __name__ == '__main__':
     # Interact with Environment
     dones = False
     rl_state, infos = tsc_env.reset()
-    traffic_state_to_dict = TrafficState2DICT(tls_id, infos) # 特征转换器
     
     while not dones:
         action, _ = model.predict(rl_state, deterministic=True)
@@ -107,6 +105,4 @@ if __name__ == '__main__':
     }
     save_str_to_json(global_infos, os.path.join(base_path, "global.json"))
 
-
-        
     tsc_env.close()

@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-06-25 16:45:03
 LastEditors: WANG Maonan
 Description: 使用固定配时收集信息
-LastEditTime: 2025-07-10 20:32:37
+LastEditTime: 2025-07-10 20:41:28
 '''
 import os
 
@@ -13,7 +13,6 @@ from tshub.utils.format_dict import save_str_to_json
 
 from utils.env_utils.make_env import make_env
 from CONFIG import SCENARIO_CONFIGS
-from collect_data.parse_state import TrafficState2DICT # 将环境信息转换为 JSON
  
 def convert_rgb_to_bgr(image):
     # Convert an RGB image to BGR
@@ -77,7 +76,6 @@ if __name__ == '__main__':
     # Interact with Environment
     dones = False
     rl_state, infos = tsc_env.reset()
-    traffic_state_to_dict = TrafficState2DICT(tls_id, infos) # 特征转换器
     index = 0
     REPEAT_NUMBER = 4 # 每个 traffic phase 重复的次数
 
