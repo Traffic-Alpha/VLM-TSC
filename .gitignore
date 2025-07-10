@@ -11,6 +11,9 @@ exp_dataset/
 *.out.xml
 *.output.xml
 
+*.csv
+
+
 gitpage/*
 examples/tshub_env3d/env3d_images/*
 
