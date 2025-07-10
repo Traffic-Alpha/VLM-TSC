@@ -1,10 +1,9 @@
 '''
 Author: Maonan Wang
 Date: 2025-01-15 18:33:20
-LastEditTime: 2025-07-10 14:46:46
+Description: TSC Wrapper for ENV 3D (collect data)
 LastEditors: WANG Maonan
-Description: TSC Wrapper for ENV 3D
-FilePath: /VLM-TSC/collect_data/utils/tsc_wrapper.py
+LastEditTime: 2025-07-10 18:15:44
 '''
 import os
 import cv2
@@ -20,10 +19,15 @@ from tshub.utils.format_dict import save_str_to_json
 def convert_rgb_to_bgr(image):
     # Convert an RGB image to BGR
     return image[:, :, ::-1]
+
 class TSCEnvWrapper(gym.Wrapper):
     def __init__(
-            self, env: Env, tls_id:str, 
-            movement_num:int, max_states_length:int = 7, 
+            self, 
+            env: Env, 
+            tls_id:str, 
+            movement_num:int, 
+            phase_num:int,
+            max_states_length:int = 7, 
             base_path: str = None
         ) -> None:
         super().__init__(env)
@@ -34,16 +38,33 @@ class TSCEnvWrapper(gym.Wrapper):
         # state 缓冲区
         self.max_states_length = max_states_length # state 的时间长度
         self.movement_num = movement_num
+        self.phase_num = phase_num
         self.buffer_idx = 0
         self.states = np.zeros(
             (self.max_states_length, self.movement_num, 6), 
             dtype=np.float32
         )
 
-        # 每个 step 的信息保存
+        # 每个 step 的信息保存 (图片&JSON)
         self.base_path = base_path
         self.step_idx = 0
         self.can_perform_action_infos = {}
+
+    # ########
+    # RL Space
+    # ########
+    @property
+    def action_space(self):
+        return gym.spaces.Discrete(self.phase_num)
+    
+    @property
+    def observation_space(self):
+        obs_space = gym.spaces.Box(
+            low=np.zeros((self.max_states_length, self.movement_num, 6), dtype=np.float32),
+            high=np.ones((self.max_states_length, self.movement_num, 6), dtype=np.float32),
+            shape=(self.max_states_length, self.movement_num, 6)
+        ) # self.states 是一个时间序列
+        return obs_space
     
     # ########
     # Wrapper
@@ -83,7 +104,19 @@ class TSCEnvWrapper(gym.Wrapper):
         """
         infos['state'] = copy.deepcopy(raw_state['state']) # 复制当前环境的 state
         return infos
-    
+
+    def _direction_to_flags(self, direction):
+        """
+        Convert a direction string to a list of flags indicating the direction.
+
+        :param direction: A string representing the direction (e.g., 's' for straight).
+        :return: A list of flags for straight, left, and right.
+        """
+        return [
+            1 if direction == 's' else 0,
+            1 if direction == 'l' else 0,
+            1 if direction == 'r' else 0
+        ]    
     # ###########
     # ENV Methods
     # ###########
@@ -91,21 +124,21 @@ class TSCEnvWrapper(gym.Wrapper):
         """reset 时初始化. 初始的 Image 全部是 0
         """
         self.step_idx = 0
-        self.can_perform_action_infos = {}
-        state =  self.env.reset()
+        self.can_perform_action_infos = {} # 最后存储全局信息
+        state = self.env.reset()
 
         # 初始化路口静态信息
         self.movement_ids = state['state']['tls'][self.tls_id]['movement_ids']
         self.phase2movements = state['state']['tls'][self.tls_id]['phase2movements']
         
         # 处理路口动态信息
-        pixel, _, _, _ = self.state_wrapper(state=state)
+        _, _, _, _ = self.state_wrapper(state=state)
 
         info = self.info_wrapper(infos={'step_time':0}, raw_state=state)
 
         # 初始化路口信息, 特征转换器
         self.traffic_state_to_dict = TrafficState2DICT(self.tls_id, info)
-        return self.states, pixel, info
+        return self.states, info
 
     def step(self, action: int):
         can_perform_action = False
@@ -165,20 +198,7 @@ class TSCEnvWrapper(gym.Wrapper):
         # 需要返回动作的时候才计算 reward
         rewards = self.reward_wrapper(states=states)
 
-        return {'rl_state':self.states, 'pixel':pixel}, rewards, truncated, dones, infos
+        return self.states, rewards, truncated, dones, infos
     
     def close(self) -> None:
         return super().close()
-
-    def _direction_to_flags(self, direction):
-        """
-        Convert a direction string to a list of flags indicating the direction.
-
-        :param direction: A string representing the direction (e.g., 's' for straight).
-        :return: A list of flags for straight, left, and right.
-        """
-        return [
-            1 if direction == 's' else 0,
-            1 if direction == 'l' else 0,
-            1 if direction == 'r' else 0
-        ]

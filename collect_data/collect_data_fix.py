@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-06-25 16:45:03
 LastEditors: WANG Maonan
 Description: 使用固定配时收集信息
-LastEditTime: 2025-07-10 14:30:07
+LastEditTime: 2025-07-10 20:32:37
 '''
 import os
 
@@ -11,9 +11,7 @@ from tshub.utils.get_abs_path import get_abs_path
 from tshub.utils.init_log import set_logger
 from tshub.utils.format_dict import save_str_to_json
 
-from utils.tsc_env3d import TSCEnvironment3D
-from utils.tsc_wrapper import TSCEnvWrapper
-
+from utils.env_utils.make_env import make_env
 from CONFIG import SCENARIO_CONFIGS
 from collect_data.parse_state import TrafficState2DICT # 将环境信息转换为 JSON
  
@@ -50,39 +48,6 @@ aircraft_inits = {
     },
 }
 
-def make_env(
-        tls_id:str, 
-        sumo_cfg:str, net_file:str,
-        scenario_glb_dir:str, 
-        movement_num:int, 
-        num_seconds:int, use_gui:bool,
-        accident_config,
-        special_vehicle_config,
-        aircraft_inits=None,
-        preset:str="1080P", resolution:float=1,
-        base_path:str = None,
-    ):
-    tsc_env = TSCEnvironment3D(
-        sumo_cfg=sumo_cfg,
-        net_file=net_file,
-        scenario_glb_dir=scenario_glb_dir,
-        preset=preset, resolution=resolution,
-        num_seconds=num_seconds,
-        tls_ids=[tls_id],
-        tls_action_type='choose_next_phase',
-        use_gui=use_gui,
-        aircraft_inits=aircraft_inits,
-        accident_config=accident_config,
-        special_vehicle_config=special_vehicle_config
-    )
-    tsc_env = TSCEnvWrapper(
-        tsc_env, tls_id=tls_id, 
-        movement_num=movement_num,
-        base_path=base_path,
-    )
-
-    return tsc_env
-
 if __name__ == '__main__':
     
     tls_id = JUNCTION_NAME
@@ -98,6 +63,7 @@ if __name__ == '__main__':
         net_file=net_file,
         scenario_glb_dir=scenario_glb_dir,
         movement_num=MOVEMENT_NUMBER,
+        phase_num=PHASE_NUMBER,
         num_seconds=NUM_SECONDS,
         accident_config=ACCIDENTS,
         special_vehicle_config=SPECIAL_VEHICLES,
@@ -110,17 +76,14 @@ if __name__ == '__main__':
 
     # Interact with Environment
     dones = False
-    step_idx = 0
-    rl_state, pixel, infos = tsc_env.reset()
+    rl_state, infos = tsc_env.reset()
     traffic_state_to_dict = TrafficState2DICT(tls_id, infos) # 特征转换器
     index = 0
     REPEAT_NUMBER = 4 # 每个 traffic phase 重复的次数
 
     while not dones:
         action = (index // REPEAT_NUMBER) % PHASE_NUMBER
-        print(f"{index}--{action}")
         states, rewards, truncated, dones, infos = tsc_env.step(action=action)
-        rl_state, camera_data = states['rl_state'], states['pixel']
         index += 1
     
     # 存储全局信息
