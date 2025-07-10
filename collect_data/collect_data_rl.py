@@ -49,7 +49,6 @@ def make_env(
         tls_ids=[tls_id],
         tls_action_type='choose_next_phase',
         use_gui=use_gui,
-        modify_states_func=None
     )
     tsc_env = TSCEnvWrapper(tsc_env, tls_id=tls_id)
 
