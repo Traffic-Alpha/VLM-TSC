@@ -4,14 +4,14 @@ Date: 2025-06-25 16:50:28
 LastEditors: WANG Maonan
 Description: 场景信息 (netrwork+route+event) 三个部分组成一个场景
 -> Note: 需要提前在 route 中定义好对应的车辆类型
-LastEditTime: 2025-07-10 14:49:04
+LastEditTime: 2025-07-10 17:11:26
 '''
 SCENARIO_CONFIGS = {
     "Hongkong_YMT_NORMAL": {
         # ================== 基础场景参数 ==================
         "SCENARIO_NAME": "Hongkong_YMT", # 场景所在文件夹
-        "SUMOCFG": "ymt_normal", # sumocfg 中包含 route & network 的组合
-        "NETFILE": "YMT", # 需要 network 加载地图信息
+        "SUMOCFG": "ymt_normal.sumocfg", # sumocfg 中包含 route & network 的组合
+        "NETFILE": "./env_normal/YMT.net.xml", # 需要 network 加载地图信息
         "JUNCTION_NAME": "J1",
         "NUM_SECONDS": 500,
         "PHASE_NUMBER": 3, # Phase 数量
