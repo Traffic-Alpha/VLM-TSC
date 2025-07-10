@@ -11,8 +11,9 @@ path_convert = get_abs_path(__file__)
 
 
 if __name__ == '__main__':
+    SCENARIO_IDX = "Hongkong_YMT_NORMAL"
     log_files = [
-        path_convert(f'./log/{i}.monitor.csv')
+        path_convert(f'./{SCENARIO_IDX}_log/{i}.monitor.csv')
         for i in range(10)
     ]
     output_file = path_convert(f'./reward_curve.png')

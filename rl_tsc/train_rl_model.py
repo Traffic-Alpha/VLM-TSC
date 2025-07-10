@@ -5,7 +5,7 @@
 + State Design: Junction Matrix
 + Action Design: Choose Next Phase 
 + Reward Design: Total Waiting Time
-LastEditTime: 2025-07-08 17:48:34
+LastEditTime: 2025-07-10 17:12:01
 '''
 import os
 import torch
@@ -21,14 +21,25 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
 from stable_baselines3.common.callbacks import CallbackList, CheckpointCallback
 
+from CONFIG import SCENARIO_CONFIGS
+
 path_convert = get_abs_path(__file__)
 logger.remove()
 set_logger(path_convert('./'), file_log_level="INFO")
 
 if __name__ == '__main__':
-    log_path = path_convert('./log/')
-    model_path = path_convert('./models/')
-    tensorboard_path = path_convert('./tensorboard/')
+    SCENARIO_IDX = "Hongkong_YMT_NORMAL" # 可视化场景, SouthKorea_Songdo, Hongkong_YMT
+    config = SCENARIO_CONFIGS.get(SCENARIO_IDX) # 获取特定场景的配置
+    SCENARIO_NAME = config["SCENARIO_NAME"]
+    SUMOCFG = config["SUMOCFG"] # config 路径名
+    PHASE_NUMBER = config["PHASE_NUMBER"] # 绿灯相位数量, action space
+    MOVEMENT_NUMBER = config["MOVEMENT_NUMBER"] # 有效 movement 的数量, observation space
+    NUM_SECONDS = config["NUM_SECONDS"] # 仿真时间
+    JUNCTION_NAME = config["JUNCTION_NAME"]
+    
+    log_path = path_convert(f'./{SCENARIO_IDX}_log/')
+    model_path = path_convert(f'./{SCENARIO_IDX}_models/')
+    tensorboard_path = path_convert(f'./{SCENARIO_IDX}_tensorboard/')
     if not os.path.exists(log_path):
         os.makedirs(log_path)
     if not os.path.exists(model_path):
@@ -39,11 +50,12 @@ if __name__ == '__main__':
     # #########
     # Init Env
     # #########
-    sumo_cfg = path_convert("../exp_networks/Hongkong_YMT/ymt_train.sumocfg")
+    sumo_cfg = path_convert(f"../exp_networks/{SCENARIO_NAME}/{SUMOCFG}")
     params = {
-        'tls_id':'J1',
-        'num_seconds':600,
-        'movement_num': 6,
+        'tls_id':JUNCTION_NAME,
+        'num_seconds':NUM_SECONDS,
+        'phase_num': PHASE_NUMBER,
+        'movement_num': MOVEMENT_NUMBER,
         'sumo_cfg':sumo_cfg,
         'use_gui':False,
         'log_file':log_path,
@@ -76,14 +88,14 @@ if __name__ == '__main__':
                 "MlpPolicy", 
                 env, 
                 batch_size=64,
-                n_steps=300, n_epochs=5, # 每次间隔 n_epoch 去评估一次
+                n_steps=320, n_epochs=5, # 每次间隔 n_epoch 去评估一次
                 learning_rate=linear_schedule(1e-3),
                 verbose=True, 
                 policy_kwargs=policy_kwargs, 
                 tensorboard_log=tensorboard_path, 
                 device=device
             )
-    model.learn(total_timesteps=3e5, tb_log_name='J1', callback=callback_list)
+    model.learn(total_timesteps=3e5, tb_log_name=f"{SCENARIO_IDX}", callback=callback_list)
     
     # #################
     # 保存 model 和 env
