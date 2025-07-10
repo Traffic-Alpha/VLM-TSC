@@ -4,7 +4,7 @@
 @Description: 处理 TSCHub ENV 中的 state, reward
 + state: 5 个时刻的每一个 movement 的 queue length
 + reward: 路口总的 waiting time
-LastEditTime: 2025-06-30 21:08:22
+LastEditTime: 2025-07-10 17:06:39
 '''
 import numpy as np
 import gymnasium as gym
@@ -20,6 +20,7 @@ class TSCEnvWrapper(gym.Wrapper):
             env: Env, 
             tls_id:str, 
             movement_num:int, 
+            phase_num:int,
             max_states_length:int = 7
         ) -> None:
         super().__init__(env)
@@ -30,6 +31,7 @@ class TSCEnvWrapper(gym.Wrapper):
         # state 缓冲区
         self.max_states_length = max_states_length # state 的时间长度
         self.movement_num = movement_num
+        self.phase_num = phase_num
         self.buffer_idx = 0
         self.states = np.zeros(
             (self.max_states_length, self.movement_num, 6), 
@@ -38,7 +40,7 @@ class TSCEnvWrapper(gym.Wrapper):
     
     @property
     def action_space(self):
-        return gym.spaces.Discrete(4) # TODO, 需要可以输入 action space
+        return gym.spaces.Discrete(self.phase_num)
     
     @property
     def observation_space(self):
