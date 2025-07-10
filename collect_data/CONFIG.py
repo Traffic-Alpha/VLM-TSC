@@ -4,17 +4,17 @@ Date: 2025-06-25 16:50:28
 LastEditors: WANG Maonan
 Description: 场景信息 (netrwork+route+event) 三个部分组成一个场景
 -> Note: 需要提前在 route 中定义好对应的车辆类型
-LastEditTime: 2025-07-09 22:11:13
+LastEditTime: 2025-07-10 14:49:04
 '''
 SCENARIO_CONFIGS = {
-    "Hongkong_YMT": {
+    "Hongkong_YMT_NORMAL": {
         # ================== 基础场景参数 ==================
-        "SCENARIO_NAME": "Hongkong_YMT",
-        "SUMOCFG": "ymt_eval", # sumocfg 中包含 route 文件
-        "NETFILE": "YMT",
+        "SCENARIO_NAME": "Hongkong_YMT", # 场景所在文件夹
+        "SUMOCFG": "ymt_normal", # sumocfg 中包含 route & network 的组合
+        "NETFILE": "YMT", # 需要 network 加载地图信息
         "JUNCTION_NAME": "J1",
         "NUM_SECONDS": 500,
-        "PHASE_NUMBER": 4,
+        "PHASE_NUMBER": 3, # Phase 数量
         "MOVEMENT_NUMBER": 6, 
         "CENTER_COORDINATES": (172, 201, 60),
         "SENSOR_INDEX_2_PHASE_INDEX": {0:2, 1:3, 2:0, 3:1},
@@ -30,12 +30,20 @@ SCENARIO_CONFIGS = {
             }, # 事故一
             {
                 "id": "accident_02",  # 事故唯一标识符
-                "depart_time": 50,          # 事故发生的仿真时间（秒）
+                "depart_time": 100,          # 事故发生的仿真时间（秒）
+                "edge_id": "30658263#0",  # 事故 Edge ID
+                "lane_index": 1,          # 发生事故的 lane index
+                "position": 99,    # 在车道上的位置（米）
+                "duration": 100,   # 事故持续时间（秒），0=永久
+            }, # 事故二
+            {
+                "id": "accident_03",  # 事故唯一标识符
+                "depart_time": 100,          # 事故发生的仿真时间（秒）
                 "edge_id": "30658263#0",  # 事故 Edge ID
                 "lane_index": 2,          # 发生事故的 lane index
                 "position": 99,    # 在车道上的位置（米）
-                "duration": 150,   # 事故持续时间（秒），0=永久
-            }, # 事故二
+                "duration": 100,   # 事故持续时间（秒），0=永久
+            }, # 事故三
         ],
         # ================== 特殊车辆配置 ==================
         "SPECIAL_VEHICLES": [

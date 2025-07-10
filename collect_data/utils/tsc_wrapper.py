@@ -1,7 +1,7 @@
 '''
 Author: Maonan Wang
 Date: 2025-01-15 18:33:20
-LastEditTime: 2025-07-08 17:37:36
+LastEditTime: 2025-07-10 14:46:46
 LastEditors: WANG Maonan
 Description: TSC Wrapper for ENV 3D
 FilePath: /VLM-TSC/collect_data/utils/tsc_wrapper.py
@@ -109,9 +109,8 @@ class TSCEnvWrapper(gym.Wrapper):
 
     def step(self, action: int):
         can_perform_action = False
+        action = {self.tls_id: action} # 构建单路口 action 的动作
         while not can_perform_action:
-            action = {self.tls_id: action} # 构建单路口 action 的动作
-            
             states, rewards, truncated, dones, infos = super().step(action) # 与环境交互
             pixel, process_obs, veh_3d_elements, can_perform_action = self.state_wrapper(state=states) # 只需要最后一个时刻的图像
             self.states[self.buffer_idx] = np.array(process_obs, dtype=np.float32)

@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-06-25 16:45:03
 LastEditors: WANG Maonan
 Description: 使用随机策略收集信息
-LastEditTime: 2025-07-08 17:38:27
+LastEditTime: 2025-07-09 19:23:16
 '''
 import os
 import random
@@ -35,6 +35,8 @@ NUM_SECONDS = config["NUM_SECONDS"] # 仿真时间
 CENTER_COORDINATES = config["CENTER_COORDINATES"]
 PHASE_NUMBER = config["PHASE_NUMBER"] # 绿灯相位数量
 MOVEMENT_NUMBER = config["MOVEMENT_NUMBER"] # 有效 movement 的数量
+ACCIDENTS = config["ACCIDENTS"] # 定义的事故
+SPECIAL_VEHICLES = config["SPECIAL_VEHICLES"] # 定义特殊车辆
 
 # 初始化场景飞行器位置, 获得俯视角图像
 aircraft_inits = {
@@ -54,6 +56,8 @@ def make_env(
         scenario_glb_dir:str, 
         movement_num:int, 
         num_seconds:int, use_gui:bool,
+        accident_config,
+        special_vehicle_config,
         aircraft_inits=None,
         preset:str="1080P", resolution:float=1,
         base_path:str = None,
@@ -68,7 +72,8 @@ def make_env(
         tls_action_type='choose_next_phase',
         use_gui=use_gui,
         aircraft_inits=aircraft_inits,
-        modify_states_func=None
+        accident_config=accident_config,
+        special_vehicle_config=special_vehicle_config
     )
     tsc_env = TSCEnvWrapper(
         tsc_env, tls_id=tls_id, 
@@ -94,6 +99,8 @@ if __name__ == '__main__':
         scenario_glb_dir=scenario_glb_dir,
         movement_num=MOVEMENT_NUMBER,
         num_seconds=NUM_SECONDS,
+        accident_config=ACCIDENTS,
+        special_vehicle_config=SPECIAL_VEHICLES,
         use_gui=True,
         aircraft_inits=aircraft_inits,
         preset="480P",
