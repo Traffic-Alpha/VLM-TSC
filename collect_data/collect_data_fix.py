@@ -86,8 +86,8 @@ def make_env(
 if __name__ == '__main__':
     
     tls_id = JUNCTION_NAME
-    sumo_cfg = path_convert(f"../exp_networks/{SCENARIO_NAME}/{SUMOCFG}.sumocfg")
-    net_file = path_convert(f"../exp_networks/{SCENARIO_NAME}/env_normal/{NETFILE}.net.xml")
+    sumo_cfg = path_convert(f"../exp_networks/{SCENARIO_NAME}/{SUMOCFG}")
+    net_file = path_convert(f"../exp_networks/{SCENARIO_NAME}/{NETFILE}")
     scenario_glb_dir = path_convert(f"../exp_networks/{SCENARIO_NAME}/3d_assets/")
     base_path = base_path = path_convert(f"../exp_dataset/{SCENARIO_NAME}/") # 存储路径
     

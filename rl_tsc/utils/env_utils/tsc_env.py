@@ -2,7 +2,7 @@
 @Author: WANG Maonan
 @Date: 2023-09-04 20:43:53
 @Description: 信号灯控制环境
-LastEditTime: 2025-06-30 20:46:44
+LastEditTime: 2025-07-10 17:30:41
 '''
 import gymnasium as gym
 
@@ -16,6 +16,7 @@ class TSCEnvironment(gym.Env):
             num_seconds:int, 
             tls_ids:List[str], 
             tls_action_type:str, 
+            trip_info:str=None, 
             use_gui:bool=False
         ) -> None:
         super().__init__()
@@ -29,6 +30,7 @@ class TSCEnvironment(gym.Env):
             num_seconds=num_seconds,
             tls_action_type=tls_action_type,
             use_gui=use_gui,
+            trip_info=trip_info,
             is_libsumo=(not use_gui), # 如果不开界面, 就是用 libsumo
         )
 

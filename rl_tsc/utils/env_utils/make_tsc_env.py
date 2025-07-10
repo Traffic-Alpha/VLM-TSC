@@ -2,7 +2,7 @@
 @Author: WANG Maonan
 @Date: 2023-09-08 17:45:54
 @Description: 创建 TSC Env + Wrapper
-LastEditTime: 2025-07-10 17:06:27
+LastEditTime: 2025-07-10 17:29:58
 '''
 import gymnasium as gym
 from utils.env_utils.tsc_env import TSCEnvironment
@@ -14,6 +14,7 @@ def make_env(
         movement_num:int, phase_num:int,
         sumo_cfg:str, use_gui:bool,
         log_file:str, env_index:int,
+        trip_info:str=None, 
     ):
     def _init() -> gym.Env: 
         tsc_scenario = TSCEnvironment(
@@ -22,6 +23,7 @@ def make_env(
             tls_ids=[tls_id], 
             tls_action_type='choose_next_phase',
             use_gui=use_gui,
+            trip_info=trip_info,
         )
         tsc_wrapper = TSCEnvWrapper(
             tsc_scenario, tls_id=tls_id, 

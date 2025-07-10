@@ -1,7 +1,7 @@
 '''
 Author: Maonan Wang
 Date: 2025-01-15 17:26:22
-LastEditTime: 2025-07-10 17:23:38
+LastEditTime: 2025-07-10 17:32:49
 LastEditors: WANG Maonan
 Description: 测试 RL 的模型, 可视化 & 输出 tripinfo
 FilePath: /VLM-TSC/state_based_rl/eval_rl_model.py
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     # Init Env
     # #########
     sumo_cfg = path_convert(f"../exp_networks/{SCENARIO_NAME}/{SUMOCFG}")
-    trip_info = path_convert(f"./『{SCENARIO_IDX}_tripinfo.out.xml") # 保存 TripInfo 在当前目录下
+    trip_info = path_convert(f"./{SCENARIO_IDX}_tripinfo.out.xml") # 保存 TripInfo 在当前目录下
     base_model_path = path_convert(f'./{SCENARIO_IDX}_models/')
     params = {
         'tls_id':JUNCTION_NAME,
