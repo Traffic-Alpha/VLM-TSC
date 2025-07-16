@@ -3,7 +3,7 @@ Author: Maonan Wang
 Date: 2025-01-16 18:51:18
 Description: 使用 RL 执行策略并收集信息
 LastEditors: WANG Maonan
-LastEditTime: 2025-07-10 20:40:48
+LastEditTime: 2025-07-16 21:08:28
 '''
 import os
 import torch
@@ -57,6 +57,7 @@ if __name__ == '__main__':
     net_file = path_convert(f"../exp_networks/{SCENARIO_NAME}/{NETFILE}")
     scenario_glb_dir = path_convert(f"../exp_networks/{SCENARIO_NAME}/3d_assets/")
     base_path = base_path = path_convert(f"../exp_dataset/{SCENARIO_NAME}/") # 存储路径
+    trip_info = path_convert(f"../exp_dataset/{SCENARIO_NAME}/tripinfo_rl.out.xml")
     
     # Load Model
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -77,6 +78,7 @@ if __name__ == '__main__':
         sumo_cfg=sumo_cfg,
         net_file=net_file,
         scenario_glb_dir=scenario_glb_dir,
+        trip_info=trip_info,
         movement_num=MOVEMENT_NUMBER,
         phase_num=PHASE_NUMBER,
         num_seconds=NUM_SECONDS,

@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-07-10 20:25:52
 LastEditors: WANG Maonan
 Description: ENV + Wrapper
-LastEditTime: 2025-07-10 20:25:52
+LastEditTime: 2025-07-16 20:53:09
 '''
 from utils.env_utils.tsc_env3d import TSCEnvironment3D
 from utils.env_utils.tsc_wrapper import TSCEnvWrapper
@@ -14,6 +14,7 @@ def make_env(
         scenario_glb_dir:str, 
         movement_num:int, phase_num:int,
         num_seconds:int, use_gui:bool,
+        trip_info:str,
         accident_config,
         special_vehicle_config,
         aircraft_inits=None,
@@ -28,6 +29,7 @@ def make_env(
         num_seconds=num_seconds,
         tls_ids=[tls_id],
         tls_action_type='choose_next_phase',
+        trip_info=trip_info,
         use_gui=use_gui,
         aircraft_inits=aircraft_inits,
         accident_config=accident_config,

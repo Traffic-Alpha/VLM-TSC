@@ -4,7 +4,7 @@ Date: 2025-06-25 16:50:28
 LastEditors: WANG Maonan
 Description: 场景信息 (netrwork+route+event) 三个部分组成一个场景
 -> Note: 需要提前在 route 中定义好对应的车辆类型
-LastEditTime: 2025-07-10 17:11:26
+LastEditTime: 2025-07-16 20:00:23
 '''
 SCENARIO_CONFIGS = {
     "Hongkong_YMT_NORMAL": {
@@ -34,7 +34,7 @@ SCENARIO_CONFIGS = {
                 "edge_id": "30658263#0",  # 事故 Edge ID
                 "lane_index": 1,          # 发生事故的 lane index
                 "position": 99,    # 在车道上的位置（米）
-                "duration": 100,   # 事故持续时间（秒），0=永久
+                "duration": 20,   # 事故持续时间（秒），0=永久
             }, # 事故二
             {
                 "id": "accident_03",  # 事故唯一标识符
@@ -42,7 +42,7 @@ SCENARIO_CONFIGS = {
                 "edge_id": "30658263#0",  # 事故 Edge ID
                 "lane_index": 2,          # 发生事故的 lane index
                 "position": 99,    # 在车道上的位置（米）
-                "duration": 100,   # 事故持续时间（秒），0=永久
+                "duration": 20,   # 事故持续时间（秒），0=永久
             }, # 事故三
         ],
         # ================== 特殊车辆配置 ==================

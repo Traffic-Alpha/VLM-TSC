@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-06-25 16:45:03
 LastEditors: WANG Maonan
 Description: 使用随机策略收集信息
-LastEditTime: 2025-07-10 20:41:39
+LastEditTime: 2025-07-16 20:52:04
 '''
 import os
 import random
@@ -55,6 +55,7 @@ if __name__ == '__main__':
     net_file = path_convert(f"../exp_networks/{SCENARIO_NAME}/{NETFILE}")
     scenario_glb_dir = path_convert(f"../exp_networks/{SCENARIO_NAME}/3d_assets/")
     base_path = base_path = path_convert(f"../exp_dataset/{SCENARIO_NAME}/") # 存储路径
+    trip_info = path_convert(f"../exp_dataset/{SCENARIO_NAME}/tripinfo_random.out.xml")
     
     # Init Env
     tsc_env = make_env(
@@ -62,6 +63,7 @@ if __name__ == '__main__':
         sumo_cfg=sumo_cfg,
         net_file=net_file,
         scenario_glb_dir=scenario_glb_dir,
+        trip_info=trip_info,
         movement_num=MOVEMENT_NUMBER,
         phase_num=PHASE_NUMBER,
         num_seconds=NUM_SECONDS,

@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-07-10 17:41:22
 LastEditors: WANG Maonan
 Description: 特殊场景使用专家策略
-LastEditTime: 2025-07-16 19:54:16
+LastEditTime: 2025-07-16 21:08:55
 '''
 import os
 from tshub.utils.get_abs_path import get_abs_path
@@ -54,13 +54,15 @@ if __name__ == '__main__':
     net_file = path_convert(f"../exp_networks/{SCENARIO_NAME}/{NETFILE}")
     scenario_glb_dir = path_convert(f"../exp_networks/{SCENARIO_NAME}/3d_assets/")
     base_path = base_path = path_convert(f"../exp_dataset/{SCENARIO_NAME}/") # 存储路径
-
+    trip_info = path_convert(f"../exp_dataset/{SCENARIO_NAME}/tripinfo_expert.out.xml")
+    
     # Init Env
     tsc_env = make_env(
         tls_id=tls_id,
         sumo_cfg=sumo_cfg,
         net_file=net_file,
         scenario_glb_dir=scenario_glb_dir,
+        trip_info=trip_info,
         movement_num=MOVEMENT_NUMBER,
         phase_num=PHASE_NUMBER,
         num_seconds=NUM_SECONDS,

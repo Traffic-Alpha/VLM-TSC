@@ -3,7 +3,7 @@ Author: Maonan Wang
 Date: 2025-01-15 16:53:53
 Description: 信号灯控制环境 3D
 LastEditors: WANG Maonan
-LastEditTime: 2025-07-09 19:45:06
+LastEditTime: 2025-07-16 20:51:48
 '''
 import gymnasium as gym
 from loguru import logger
@@ -17,6 +17,7 @@ class TSCEnvironment3D(gym.Env):
             scenario_glb_dir:str, 
             num_seconds:int, 
             tls_ids:List[str], tls_action_type:str, 
+            trip_info:str, # 车辆报告
             # accident & special vehicles
             accident_config:Dict[str, Any],
             special_vehicle_config:Dict[str, Any],
@@ -41,6 +42,7 @@ class TSCEnvironment3D(gym.Env):
             tls_ids=tls_ids, 
             num_seconds=num_seconds,
             tls_action_type=tls_action_type,
+            trip_info=trip_info,
             use_gui=use_gui,
             is_libsumo=(not use_gui), # 如果不开界面, 就是用 libsumo
             # 下面是用于渲染的参数
