@@ -3,7 +3,7 @@ Author: Maonan Wang
 Date: 2025-01-15 18:33:20
 Description: TSC Wrapper for ENV 3D (collect data)
 LastEditors: WANG Maonan
-LastEditTime: 2025-07-10 18:15:44
+LastEditTime: 2025-07-16 19:09:51
 '''
 import os
 import cv2
@@ -13,7 +13,7 @@ import gymnasium as gym
 from gymnasium.core import Env
 
 from utils.save_vector import save_states
-from collect_data.parse_state import TrafficState2DICT # 将环境信息转换为 JSON
+from parse_infos.parse_direction_infos import TrafficState2DICT # 将环境信息转换为 JSON
 from tshub.utils.format_dict import save_str_to_json
 
 def convert_rgb_to_bgr(image):

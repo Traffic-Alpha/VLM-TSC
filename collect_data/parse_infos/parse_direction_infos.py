@@ -1,16 +1,15 @@
 '''
 Author: Maonan Wang
 Date: 2025-01-21 18:37:24
-LastEditTime: 2025-03-20 05:14:20
-LastEditors: Maonan Wang
-Description: 获得图片对应的车辆信息
+Description: 将路口信息处理为每个方向的信息
 - tls 获得 in_road_heading, 按从小到大顺序, 就是 Image 的顺序
     - 获得 road 对应的 lane（可以计算车道数）
     - vehicles 筛选出当前 in_road 的车辆
     - 所有 phase 的信息, 和 this phase index
-FilePath: /VLM-TSC/collect_data/collect_data/parse_state.py
+LastEditors: WANG Maonan
+LastEditTime: 2025-07-16 17:13:45
 '''
-class TrafficState2DICT:
+class TrafficState2DICT(object):
     def __init__(self, tls_id: str, raw_infos):
         """初始化类并计算不变的信息, 需要计算:
         1. in road ids
@@ -24,8 +23,8 @@ class TrafficState2DICT:
         self.sorted_in_road_ids = sorted(
             tls_info['in_roads_heading'], 
             key=tls_info['in_roads_heading'].get
-        )
-        self.sorted_out_road_ids = self.__calculate_sorted_out_road_ids(tls_info)
+        ) # 进入路口的车道 ID
+        self.sorted_out_road_ids = self.__calculate_sorted_out_road_ids(tls_info) # 离开路口的车道 ID
     
     def __calculate_sorted_out_road_ids(self, tls_info):
         """计算并返回旋转后的 sorted_out_road_ids
