@@ -3,7 +3,7 @@ Author: Maonan Wang
 Date: 2025-01-15 16:53:53
 Description: 信号灯控制环境 3D
 LastEditors: WANG Maonan
-LastEditTime: 2025-07-16 20:51:48
+LastEditTime: 2025-07-17 15:42:31
 '''
 import gymnasium as gym
 from loguru import logger
@@ -66,8 +66,8 @@ class TSCEnvironment3D(gym.Env):
         )
 
         # 特殊事件的配置
-        self.accident_configs = accident_config
-        self.special_vehicle_configs = special_vehicle_config
+        self.accident_configs = accident_config or []
+        self.special_vehicle_configs = special_vehicle_config or []
 
     def reset(self):
         state_infos = self.tsc_env.reset()
