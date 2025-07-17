@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2025-07-10 09:35:12 by Eclipse SUMO netedit Version 1.22.0
+<neteditConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/neteditConfiguration.xsd">
+
+    <input>
+        <sumo-net-file value="/home/china/桌面/Test/exp_networks/Beijing_Beishahe/env/map.net.xml"/>
+    </input>
+
+    <output>
+        <output-file value="/home/china/桌面/Test/exp_networks/Beijing_Beishahe/env/map.net.xml"/>
+        <output.street-names value="true"/>
+    </output>
+
+    <processing>
+        <geometry.min-radius.fix.railways value="false"/>
+        <geometry.max-grade.fix value="false"/>
+        <offset.disable-normalization value="true"/>
+        <lefthand value="0"/>
+    </processing>
+
+    <junctions>
+        <no-turnarounds value="true"/>
+        <junctions.corner-detail value="5"/>
+        <junctions.limit-turn-speed value="5.50"/>
+        <rectangular-lane-cut value="0"/>
+    </junctions>
+
+    <pedestrian>
+        <walkingareas value="0"/>
+    </pedestrian>
+
+</neteditConfiguration>
+-->
+
+<net version="1.20" junctionCornerDetail="5" limitTurnSpeed="5.50" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/net_file.xsd">
+
+    <location netOffset="-436434.56,-4444312.25" convBoundary="277.12,214.94,530.09,581.01" origBoundary="116.253702,40.146796,116.266751,40.154972" projParameter="+proj=utm +zone=50 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"/>
+
+    <type id="highway.tertiary" priority="10" numLanes="1" speed="22.22" disallow="tram rail_urban rail rail_electric rail_fast ship" oneway="0"/>
+
+    <edge id=":INT1_0" function="internal">
+        <lane id=":INT1_0_0" index="0" speed="22.22" length="32.86" shape="472.16,380.40 460.32,411.05"/>
+        <lane id=":INT1_0_1" index="1" speed="22.22" length="32.86" shape="469.18,379.24 457.33,409.89"/>
+    </edge>
+    <edge id=":INT1_2" function="internal">
+        <lane id=":INT1_2_0" index="0" speed="12.70" length="35.64" shape="466.19,378.07 461.36,387.09 455.13,392.65 447.50,394.75 438.46,393.38"/>
+        <lane id=":INT1_2_1" index="1" speed="12.26" length="33.14" shape="466.19,378.07 461.86,385.78 455.95,390.39 448.47,391.91 439.43,390.33"/>
+    </edge>
+    <edge id=":INT1_4" function="internal">
+        <lane id=":INT1_4_0" index="0" speed="7.01" length="10.18" shape="444.06,375.76 447.05,376.38 449.47,376.08 451.33,374.88 452.62,372.77"/>
+    </edge>
+    <edge id=":INT1_5" function="internal">
+        <lane id=":INT1_5_0" index="0" speed="12.79" length="39.49" shape="443.09,378.81 452.75,383.62 458.34,390.40 459.87,399.16 457.33,409.89"/>
+        <lane id=":INT1_5_1" index="1" speed="11.91" length="34.10" shape="442.12,381.86 450.44,386.01 455.24,391.86 456.55,399.44 454.35,408.73"/>
+    </edge>
+    <edge id=":INT1_7" function="internal">
+        <lane id=":INT1_7_0" index="0" speed="6.38" length="9.04" shape="440.87,403.48 441.43,401.04 441.05,399.06 439.74,397.52 437.49,396.43"/>
+    </edge>
+    <edge id=":INT1_8" function="internal">
+        <lane id=":INT1_8_0" index="0" speed="22.22" length="32.88" shape="443.85,404.64 455.60,373.93"/>
+        <lane id=":INT1_8_1" index="1" speed="22.22" length="32.88" shape="446.83,405.80 458.58,375.10"/>
+    </edge>
+
+    <edge id="657921284.293" from="J0" to="INT1" priority="10" type="highway.tertiary" spreadType="center" shape="283.19,326.57 452.49,381.88">
+        <lane id="657921284.293_0" index="0" speed="22.22" length="168.22" shape="284.18,323.53 444.06,375.76">
+            <param key="origId" value="657921284"/>
+        </lane>
+        <lane id="657921284.293_1" index="1" speed="22.22" length="168.22" shape="283.19,326.57 443.09,378.81">
+            <param key="origId" value="657921284"/>
+        </lane>
+        <lane id="657921284.293_2" index="2" speed="22.22" length="168.22" shape="282.20,329.61 442.12,381.86">
+            <param key="origId" value="657921284"/>
+        </lane>
+        <param key="origTo" value="6942549792"/>
+    </edge>
+    <edge id="657921286#1" from="INT1" to="J1" priority="10" type="highway.tertiary" spreadType="center" shape="447.14,396.14 431.59,391.20 277.12,340.53">
+        <lane id="657921286#1_0" index="0" speed="22.22" length="169.78" shape="437.49,396.43 430.61,394.25 276.12,343.57">
+            <param key="origId" value="657921286"/>
+        </lane>
+        <lane id="657921286#1_1" index="1" speed="22.22" length="169.78" shape="438.46,393.38 431.59,391.20 277.12,340.53">
+            <param key="origId" value="657921286"/>
+        </lane>
+        <lane id="657921286#1_2" index="2" speed="22.22" length="169.78" shape="439.43,390.33 432.57,388.15 278.12,337.49">
+            <param key="origId" value="657921286"/>
+        </lane>
+        <param key="origFrom" value="6161627805"/>
+    </edge>
+    <edge id="657921289.337" from="J4" to="INT1" name="北沙河西三路" priority="10" type="highway.tertiary" spreadType="center" shape="377.58,575.95 447.14,396.14">
+        <lane id="657921289.337_0" index="0" speed="22.22" length="183.68" shape="374.60,574.80 440.87,403.48">
+            <param key="origId" value="657921289"/>
+        </lane>
+        <lane id="657921289.337_1" index="1" speed="22.22" length="183.68" shape="377.58,575.95 443.85,404.64">
+            <param key="origId" value="657921289"/>
+        </lane>
+        <lane id="657921289.337_2" index="2" speed="22.22" length="183.68" shape="380.56,577.10 446.83,405.80">
+            <param key="origId" value="657921289"/>
+        </lane>
+        <param key="origTo" value="6161627805"/>
+    </edge>
+    <edge id="741602121" from="INT1" to="J5" name="北沙河西三路" priority="10" type="highway.tertiary" spreadType="center" shape="462.41,396.85 427.58,486.32 390.72,581.01">
+        <lane id="741602121_0" index="0" speed="22.22" length="183.63" shape="460.32,411.05 430.56,487.48 393.70,582.17">
+            <param key="origId" value="741602121"/>
+        </lane>
+        <lane id="741602121_1" index="1" speed="22.22" length="183.63" shape="457.33,409.89 427.58,486.32 390.72,581.01">
+            <param key="origId" value="741602121"/>
+        </lane>
+        <lane id="741602121_2" index="2" speed="22.22" length="183.63" shape="454.35,408.73 424.60,485.16 387.74,579.85">
+            <param key="origId" value="741602121"/>
+        </lane>
+        <param key="origFrom" value="6161627806"/>
+    </edge>
+    <edge id="741602122" from="INT1" to="J2" priority="10" type="highway.tertiary" spreadType="center" shape="452.49,381.88 482.33,305.52 513.81,224.97 517.65,214.94">
+        <lane id="741602122_0" index="0" speed="22.22" length="170.67" shape="452.62,372.77 479.35,304.36 510.83,223.81 514.66,213.80">
+            <param key="origId" value="741602122"/>
+        </lane>
+        <lane id="741602122_1" index="1" speed="22.22" length="170.67" shape="455.60,373.93 482.33,305.52 513.81,224.97 517.65,214.94">
+            <param key="origId" value="741602122"/>
+        </lane>
+        <lane id="741602122_2" index="2" speed="22.22" length="170.67" shape="458.58,375.10 485.31,306.68 516.79,226.13 520.64,216.08">
+            <param key="origId" value="741602122"/>
+        </lane>
+        <param key="origFrom" value="6942549792"/>
+    </edge>
+    <edge id="741602130.216" from="J3" to="INT1" priority="10" type="highway.tertiary" spreadType="center" shape="530.09,220.64 462.41,396.85">
+        <lane id="741602130.216_0" index="0" speed="22.22" length="169.89" shape="533.08,221.79 472.16,380.40">
+            <param key="origId" value="741602130"/>
+        </lane>
+        <lane id="741602130.216_1" index="1" speed="22.22" length="169.89" shape="530.09,220.64 469.18,379.24">
+            <param key="origId" value="741602130"/>
+        </lane>
+        <lane id="741602130.216_2" index="2" speed="22.22" length="169.89" shape="527.10,219.49 466.19,378.07">
+            <param key="origId" value="741602130"/>
+        </lane>
+        <param key="origTo" value="6161627806"/>
+    </edge>
+
+    <tlLogic id="INT1" type="static" programID="0" offset="0">
+        <phase duration="30" state="GGrrgrrgGG"/>
+        <phase duration="3"  state="yyrrgrrgyy"/>
+        <phase duration="30" state="rrGGgrrgrr"/>
+        <phase duration="3"  state="rryygrrgrr"/>
+        <phase duration="30" state="rrrrgGGgrr"/>
+        <phase duration="3"  state="rrrrgyygrr"/>
+    </tlLogic>
+
+    <junction id="INT1" type="traffic_light" x="454.01" y="391.62" incLanes="741602130.216_0 741602130.216_1 741602130.216_2 657921284.293_0 657921284.293_1 657921284.293_2 657921289.337_0 657921289.337_1 657921289.337_2" intLanes=":INT1_0_0 :INT1_0_1 :INT1_2_0 :INT1_2_1 :INT1_4_0 :INT1_5_0 :INT1_5_1 :INT1_7_0 :INT1_8_0 :INT1_8_1" shape="473.65,380.98 451.13,372.18 449.75,374.07 448.75,374.56 447.55,374.75 446.15,374.64 444.55,374.24 437.01,397.96 438.97,399.05 439.51,399.80 439.76,400.69 439.71,401.73 439.38,402.90 461.81,411.63">
+        <request index="0" response="0000000000" foes="0001100000" cont="0"/>
+        <request index="1" response="0000000000" foes="0001100000" cont="0"/>
+        <request index="2" response="1100000000" foes="1101100000" cont="0"/>
+        <request index="3" response="1100000000" foes="1101100000" cont="0"/>
+        <request index="4" response="0000000000" foes="0000000000" cont="0"/>
+        <request index="5" response="1100001111" foes="1100001111" cont="0"/>
+        <request index="6" response="1100001111" foes="1100001111" cont="0"/>
+        <request index="7" response="0000000000" foes="0000000000" cont="0"/>
+        <request index="8" response="0000000000" foes="0001101100" cont="0"/>
+        <request index="9" response="0000000000" foes="0001101100" cont="0"/>
+        <param key="origEdgeIds" value="657921286#0 741602120 741602123"/>
+        <param key="origId" value="6161627805 6161627806 6942549792"/>
+    </junction>
+    <junction id="J0" type="dead_end" x="283.19" y="326.57" incLanes="" intLanes="" shape="281.70,331.13 284.68,322.01"/>
+    <junction id="J1" type="dead_end" x="277.12" y="340.53" incLanes="657921286#1_0 657921286#1_1 657921286#1_2" intLanes="" shape="275.62,345.09 278.62,335.97"/>
+    <junction id="J2" type="dead_end" x="517.65" y="214.94" incLanes="741602122_0 741602122_1 741602122_2" intLanes="" shape="513.17,213.22 522.13,216.66"/>
+    <junction id="J3" type="dead_end" x="530.09" y="220.64" incLanes="" intLanes="" shape="525.61,218.92 534.57,222.36"/>
+    <junction id="J4" type="dead_end" x="377.58" y="575.95" incLanes="" intLanes="" shape="382.06,577.68 373.10,574.22"/>
+    <junction id="J5" type="dead_end" x="390.72" y="581.01" incLanes="741602121_0 741602121_1 741602121_2" intLanes="" shape="395.19,582.75 386.25,579.27"/>
+
+    <connection from="657921284.293" to="741602122" fromLane="0" toLane="0" via=":INT1_4_0" tl="INT1" linkIndex="4" dir="r" state="O"/>
+    <connection from="657921284.293" to="741602121" fromLane="1" toLane="1" via=":INT1_5_0" tl="INT1" linkIndex="5" dir="l" state="o"/>
+    <connection from="657921284.293" to="741602121" fromLane="2" toLane="2" via=":INT1_5_1" tl="INT1" linkIndex="6" dir="l" state="o"/>
+    <connection from="657921289.337" to="657921286#1" fromLane="0" toLane="0" via=":INT1_7_0" tl="INT1" linkIndex="7" dir="r" state="O"/>
+    <connection from="657921289.337" to="741602122" fromLane="1" toLane="1" via=":INT1_8_0" tl="INT1" linkIndex="8" dir="s" state="O"/>
+    <connection from="657921289.337" to="741602122" fromLane="2" toLane="2" via=":INT1_8_1" tl="INT1" linkIndex="9" dir="s" state="O"/>
+    <connection from="741602130.216" to="741602121" fromLane="0" toLane="0" via=":INT1_0_0" tl="INT1" linkIndex="0" dir="s" state="O"/>
+    <connection from="741602130.216" to="741602121" fromLane="1" toLane="1" via=":INT1_0_1" tl="INT1" linkIndex="1" dir="s" state="O"/>
+    <connection from="741602130.216" to="657921286#1" fromLane="2" toLane="1" via=":INT1_2_0" tl="INT1" linkIndex="2" dir="l" state="o"/>
+    <connection from="741602130.216" to="657921286#1" fromLane="2" toLane="2" via=":INT1_2_1" tl="INT1" linkIndex="3" dir="l" state="o"/>
+
+    <connection from=":INT1_0" to="741602121" fromLane="0" toLane="0" dir="s" state="M"/>
+    <connection from=":INT1_0" to="741602121" fromLane="1" toLane="1" dir="s" state="M"/>
+    <connection from=":INT1_2" to="657921286#1" fromLane="0" toLane="1" dir="l" state="M"/>
+    <connection from=":INT1_2" to="657921286#1" fromLane="1" toLane="2" dir="l" state="M"/>
+    <connection from=":INT1_4" to="741602122" fromLane="0" toLane="0" dir="r" state="M"/>
+    <connection from=":INT1_5" to="741602121" fromLane="0" toLane="1" dir="l" state="M"/>
+    <connection from=":INT1_5" to="741602121" fromLane="1" toLane="2" dir="l" state="M"/>
+    <connection from=":INT1_7" to="657921286#1" fromLane="0" toLane="0" dir="r" state="M"/>
+    <connection from=":INT1_8" to="741602122" fromLane="0" toLane="1" dir="s" state="M"/>
+    <connection from=":INT1_8" to="741602122" fromLane="1" toLane="2" dir="s" state="M"/>
+
+</net>
