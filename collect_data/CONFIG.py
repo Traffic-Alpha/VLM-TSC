@@ -4,9 +4,33 @@ Date: 2025-06-25 16:50:28
 LastEditors: WANG Maonan
 Description: 场景信息 (netrwork+route+event) 三个部分组成一个场景
 -> Note: 需要提前在 route 中定义好对应的车辆类型
-LastEditTime: 2025-07-16 20:00:23
+LastEditTime: 2025-07-17 15:54:14
 '''
 SCENARIO_CONFIGS = {
+    "Beijing_Beishahe_Normal": {
+        "SCENARIO_NAME": "Beijing_Beishahe",
+        "SUMOCFG": "easy_high_density.sumocfg",
+        "NETFILE": "./networks/easy.net.xml",
+        "JUNCTION_NAME": "INT1",
+        "NUM_SECONDS": 800,
+        "PHASE_NUMBER": 3,
+        "MOVEMENT_NUMBER": 6, 
+        "CENTER_COORDINATES": (450, 400, 100),
+        "SENSOR_INDEX_2_PHASE_INDEX": {0:2, 1:1, 2:0},
+        "ACCIDENTS": [
+            {
+                "id": "accident_01",  # 事故唯一标识符
+                "depart_time": 20,    # 事故发生的仿真时间（秒）
+                "edge_id": "741602130.216",  # 事故 Edge ID
+                "lane_index": 2,          # 发生事故的 lane index
+                "position": 167,    # 在车道上的位置（米）, 车道长度-1
+                "duration": 50,   # 事故持续时间（秒），0=永久
+            }, # 事故一
+        ],
+        # ================== 特殊车辆配置 ==================
+        "SPECIAL_VEHICLES": None
+    },
+    
     "Hongkong_YMT_NORMAL": {
         # ================== 基础场景参数 ==================
         "SCENARIO_NAME": "Hongkong_YMT", # 场景所在文件夹

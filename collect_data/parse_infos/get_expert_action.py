@@ -32,8 +32,8 @@ class ExpertTrafficSignalController:
         """
         self.tls_id = tls_id
 
-        self.phase2movements = raw_infos['state']['tls']['J1']['phase2movements']
-        self.movement_lane_ids = raw_infos['state']['tls']['J1']['movement_lane_ids']
+        self.phase2movements = raw_infos['state']['tls'][self.tls_id]['phase2movements']
+        self.movement_lane_ids = raw_infos['state']['tls'][self.tls_id]['movement_lane_ids']
         self.lane_lengths = raw_infos['state']['lane']
         
         # 构建车道到 movement 的映射

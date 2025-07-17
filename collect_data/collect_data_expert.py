@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-07-10 17:41:22
 LastEditors: WANG Maonan
 Description: 特殊场景使用专家策略
-LastEditTime: 2025-07-16 21:08:55
+LastEditTime: 2025-07-17 15:55:30
 '''
 import os
 from tshub.utils.get_abs_path import get_abs_path
@@ -23,7 +23,7 @@ path_convert = get_abs_path(__file__)
 set_logger(path_convert('./'))
 
 # 读取场景配置
-SCENARIO_IDX = "Hongkong_YMT_NORMAL" # 可视化场景, SouthKorea_Songdo, Hongkong_YMT
+SCENARIO_IDX = "Beijing_Beishahe_Normal" # 可视化场景, SouthKorea_Songdo, Hongkong_YMT
 config = SCENARIO_CONFIGS.get(SCENARIO_IDX) # 获取特定场景的配置
 SCENARIO_NAME = config["SCENARIO_NAME"]
 SUMOCFG = config["SUMOCFG"]
