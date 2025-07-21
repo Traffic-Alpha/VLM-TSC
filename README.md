@@ -3,7 +3,7 @@
  * @Date: 2025-01-13 19:24:39
  * @Description: VLM for TSC
  * @LastEditors: WANG Maonan
- * @LastEditTime: 2025-07-21 17:34:14
+ * @LastEditTime: 2025-07-21 19:46:43
 -->
 # 数据集介绍
 
@@ -47,6 +47,20 @@
 |-----------|-----------|-----------|-----------|-----------|
 | ![BEV](./assets/dataset/Beijing_Gaojiaoyuan/low_quality_rgb/bev.png) | ![0](./assets/dataset/Beijing_Gaojiaoyuan/low_quality_rgb/0.png) | ![1](./assets/dataset/Beijing_Gaojiaoyuan/low_quality_rgb/1.png) | ![2](./assets/dataset/Beijing_Gaojiaoyuan/low_quality_rgb/2.png) | ![3](./assets/dataset/Beijing_Gaojiaoyuan/low_quality_rgb/3.png) |
 | ![BEV](./assets/dataset/Beijing_Gaojiaoyuan/high_quality_rgb/bev.png) | ![0](./assets/dataset/Beijing_Gaojiaoyuan/high_quality_rgb/0.png) | ![1](./assets/dataset/Beijing_Gaojiaoyuan/high_quality_rgb/1.png) | ![2](./assets/dataset/Beijing_Gaojiaoyuan/high_quality_rgb/2.png) | ![3](./assets/dataset/Beijing_Gaojiaoyuan/high_quality_rgb/3.png) |
+
+
+## Beijing Pinganli
+
+**空场景俯视图：**
+
+![3DRender](./assets/dataset/Beijing_Pinganli/network/bev.png)
+
+**不同视角渲染效果：**
+
+| BEV | 0 | 1 | 2 | 3 |
+|-----------|-----------|-----------|-----------|-----------|
+| ![BEV](./assets/dataset/Beijing_Pinganli/low_quality_rgb/bev.png) | ![0](./assets/dataset/Beijing_Pinganli/low_quality_rgb/0.png) | ![1](./assets/dataset/Beijing_Pinganli/low_quality_rgb/1.png) | ![2](./assets/dataset/Beijing_Pinganli/low_quality_rgb/2.png) | ![3](./assets/dataset/Beijing_Pinganli/low_quality_rgb/3.png) |
+| ![BEV](./assets/dataset/Beijing_Pinganli/high_quality_rgb/bev.png) | ![0](./assets/dataset/Beijing_Pinganli/high_quality_rgb/0.png) | ![1](./assets/dataset/Beijing_Pinganli/high_quality_rgb/1.png) | ![2](./assets/dataset/Beijing_Pinganli/high_quality_rgb/2.png) | ![3](./assets/dataset/Beijing_Pinganli/high_quality_rgb/3.png) |
 
 
 # 特殊交通路口场景
