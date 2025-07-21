@@ -1,11 +1,21 @@
 <!--
  * @Author: Maonan Wang
  * @Date: 2025-01-13 19:24:39
- * @LastEditTime: 2025-07-16 22:17:45
- * @LastEditors: WANG Maonan
  * @Description: VLM for TSC
- * @FilePath: /VLM-TSC/README.md
+ * @LastEditors: WANG Maonan
+ * @LastEditTime: 2025-07-21 15:29:10
 -->
+# 数据集介绍
+
+## Beijing Beishahe
+
+| BEV | 0 | 1 | 2 |
+|-----------|-----------|-----------|-----------|
+| ![BEV](./assets/dataset/Beijing_Beishahe/low_quality_rgb/bev.png) | ![0](./assets/dataset/Beijing_Beishahe/low_quality_rgb/0.png) | ![1](./assets/dataset/Beijing_Beishahe/low_quality_rgb/1.png) | ![2](./assets/dataset/Beijing_Beishahe/low_quality_rgb/2.png) | ![3](./assets/dataset/Beijing_Beishahe/low_quality_rgb/3.png) |
+| ![BEV](./assets/dataset/Beijing_Beishahe/high_quality_rgb/bev.png) | ![0](./assets/dataset/Beijing_Beishahe/high_quality_rgb/0.png) | ![1](./assets/dataset/Beijing_Beishahe/high_quality_rgb/1.png) | ![2](./assets/dataset/Beijing_Beishahe/high_quality_rgb/2.png) | ![3](./assets/dataset/Beijing_Beishahe/high_quality_rgb/3.png) |
+
+
+
 # 特殊交通路口场景
 
 本仿真平台能够模拟多种复杂或突发的交通场景，为算法测试提供更贴近现实的环境。以下介绍四种关键的特殊场景：
