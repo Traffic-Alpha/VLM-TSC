@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-07-10 17:41:22
 LastEditors: WANG Maonan
 Description: 特殊场景使用专家策略
-LastEditTime: 2025-07-17 15:55:30
+LastEditTime: 2025-07-25 13:21:30
 '''
 import os
 from tshub.utils.get_abs_path import get_abs_path
@@ -23,7 +23,7 @@ path_convert = get_abs_path(__file__)
 set_logger(path_convert('./'))
 
 # 读取场景配置
-SCENARIO_IDX = "Beijing_Beishahe_Normal" # 可视化场景, SouthKorea_Songdo, Hongkong_YMT
+SCENARIO_IDX = "Hongkong_YMT_EVENETS" # 可视化场景, SouthKorea_Songdo, Hongkong_YMT
 config = SCENARIO_CONFIGS.get(SCENARIO_IDX) # 获取特定场景的配置
 SCENARIO_NAME = config["SCENARIO_NAME"]
 SUMOCFG = config["SUMOCFG"]
@@ -53,8 +53,9 @@ if __name__ == '__main__':
     sumo_cfg = path_convert(f"../exp_networks/{SCENARIO_NAME}/{SUMOCFG}")
     net_file = path_convert(f"../exp_networks/{SCENARIO_NAME}/{NETFILE}")
     scenario_glb_dir = path_convert(f"../exp_networks/{SCENARIO_NAME}/3d_assets/")
-    base_path = base_path = path_convert(f"../exp_dataset/{SCENARIO_NAME}/") # 存储路径
-    trip_info = path_convert(f"../exp_dataset/{SCENARIO_NAME}/tripinfo_expert.out.xml")
+    # 输出文件夹
+    base_path = base_path = path_convert(f"../exp_dataset/{SCENARIO_IDX}/") # 存储路径
+    trip_info = path_convert(f"../exp_dataset/{SCENARIO_IDX}/tripinfo_fix.out.xml")
     
     # Init Env
     tsc_env = make_env(

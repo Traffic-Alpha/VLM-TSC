@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-06-25 16:45:03
 LastEditors: WANG Maonan
 Description: 使用随机策略收集信息
-LastEditTime: 2025-07-16 20:52:04
+LastEditTime: 2025-07-25 13:12:40
 '''
 import os
 import random
@@ -23,7 +23,7 @@ path_convert = get_abs_path(__file__)
 set_logger(path_convert('./'))
 
 # 读取场景配置
-SCENARIO_IDX = "Hongkong_YMT_NORMAL" # 可视化场景, SouthKorea_Songdo, Hongkong_YMT
+SCENARIO_IDX = "Hongkong_YMT_EVENETS" # 可视化场景, SouthKorea_Songdo, Hongkong_YMT
 config = SCENARIO_CONFIGS.get(SCENARIO_IDX) # 获取特定场景的配置
 SCENARIO_NAME = config["SCENARIO_NAME"]
 SUMOCFG = config["SUMOCFG"]
@@ -49,13 +49,13 @@ aircraft_inits = {
 }
 
 if __name__ == '__main__':
-    
     tls_id = JUNCTION_NAME
     sumo_cfg = path_convert(f"../exp_networks/{SCENARIO_NAME}/{SUMOCFG}")
     net_file = path_convert(f"../exp_networks/{SCENARIO_NAME}/{NETFILE}")
     scenario_glb_dir = path_convert(f"../exp_networks/{SCENARIO_NAME}/3d_assets/")
-    base_path = base_path = path_convert(f"../exp_dataset/{SCENARIO_NAME}/") # 存储路径
-    trip_info = path_convert(f"../exp_dataset/{SCENARIO_NAME}/tripinfo_random.out.xml")
+    # 输出文件夹
+    base_path = base_path = path_convert(f"../exp_dataset/{SCENARIO_IDX}/") # 存储路径
+    trip_info = path_convert(f"../exp_dataset/{SCENARIO_IDX}/tripinfo_random.out.xml")
     
     # Init Env
     tsc_env = make_env(
