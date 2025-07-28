@@ -3,7 +3,7 @@ Author: Maonan Wang
 Date: 2025-01-15 16:53:53
 Description: 信号灯控制环境 3D
 LastEditors: WANG Maonan
-LastEditTime: 2025-07-17 15:42:31
+LastEditTime: 2025-07-28 21:52:26
 '''
 import gymnasium as gym
 from loguru import logger
@@ -23,6 +23,7 @@ class TSCEnvironment3D(gym.Env):
             special_vehicle_config:Dict[str, Any],
             # 3D Rendering
             preset="1080P", 
+            vehicle_model="high",
             resolution=0.5,
             use_gui:bool=False,
             aircraft_inits:Dict[str, Dict[str, Any]] = None, 
@@ -49,6 +50,7 @@ class TSCEnvironment3D(gym.Env):
             preset=preset,
             resolution=resolution,
             render_mode="offscreen", # 如果设置了 use_render_pipeline, 此时只能是 onscreen
+            vehicle_model=vehicle_model, # 使用 high poly 模型 或是 low poly 模型
             debuger_print_node=False,
             debuger_spin_camera=False,
             should_count_vehicles=True, # 额外返回场景内车辆位置信息, 用于渲染

@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-07-10 20:25:52
 LastEditors: WANG Maonan
 Description: ENV + Wrapper
-LastEditTime: 2025-07-17 16:04:37
+LastEditTime: 2025-07-28 21:52:55
 '''
 import os
 from loguru import logger 
@@ -31,6 +31,7 @@ def make_env(
         special_vehicle_config,
         aircraft_inits=None,
         preset:str="1080P", resolution:float=1,
+        vehicle_model="high",
         base_path:str = None,
     ):
     ensure_directory_exists(trip_info)
@@ -44,9 +45,10 @@ def make_env(
         tls_action_type='choose_next_phase',
         trip_info=trip_info,
         use_gui=use_gui,
+        vehicle_model=vehicle_model,
         aircraft_inits=aircraft_inits,
         accident_config=accident_config,
-        special_vehicle_config=special_vehicle_config
+        special_vehicle_config=special_vehicle_config,
     )
     tsc_env = TSCEnvWrapper(
         tsc_env, tls_id=tls_id, 
