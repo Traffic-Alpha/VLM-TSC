@@ -4,7 +4,7 @@ Date: 2025-06-25 16:50:28
 LastEditors: WANG Maonan
 Description: 场景信息 (netrwork+route+event) 三个部分组成一个场景
 -> Note: 需要提前在 route 中定义好对应的车辆类型
-LastEditTime: 2025-07-23 19:50:24
+LastEditTime: 2025-07-29 16:02:03
 '''
 SCENARIO_CONFIGS = {
     # ===> Beijing_Beishahe
@@ -46,6 +46,42 @@ SCENARIO_CONFIGS = {
         "ACCIDENTS": None,
         # ================== 特殊车辆配置 ==================
         "SPECIAL_VEHICLES": None
+    },
+    # 包含特殊事件
+    "Beijing_Changjianglu_Event": {
+        "SCENARIO_NAME": "Beijing_Changjianglu",
+        "SUMOCFG": "easy_fluctuating_commuter.sumocfg",
+        "NETFILE": "./networks/easy.net.xml",
+        "JUNCTION_NAME": "INT1",
+        "NUM_SECONDS": 500,
+        "PHASE_NUMBER": 3,
+        "MOVEMENT_NUMBER": 6, 
+        "CENTER_COORDINATES": (933, 175, 100),
+        "SENSOR_INDEX_2_PHASE_INDEX": {0:2, 1:1, 2:0},
+        "ACCIDENTS": [
+            {
+                "id": "accident_01",  # 事故唯一标识符
+                "depart_time": 100,    # 事故发生的仿真时间（秒）
+                "edge_id": "832511541#0.628",  # 事故 Edge ID
+                "lane_index": 2,          # 发生事故的 lane index
+                "position": 283,    # 在车道上的位置（米）, 车道长度-1
+                "duration": 50,   # 事故持续时间（秒），0=永久
+            }, # 事故一
+        ],
+        "SPECIAL_VEHICLES": [
+            {
+                "id": "ambulance_01", # 车辆唯一ID
+                "type": "emergency",  # 车辆类型
+                "depart_time": 200, # 出发时间(秒)
+                "route": ["832511541#0.628", "606446493#4"],
+            },
+            {
+                "id": "fire_01",
+                "type": "fire_engine",
+                "depart_time": 300,
+                "route": ["606446495#0.451", "606446495#5"],
+            },
+        ]
     },
 
     # ===> Beijing_Gaojiaoyuan

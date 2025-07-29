@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-06-25 16:45:03
 LastEditors: WANG Maonan
 Description: 使用随机策略收集信息
-LastEditTime: 2025-07-25 13:12:40
+LastEditTime: 2025-07-29 16:03:50
 '''
 import os
 import random
@@ -23,7 +23,7 @@ path_convert = get_abs_path(__file__)
 set_logger(path_convert('./'))
 
 # 读取场景配置
-SCENARIO_IDX = "Hongkong_YMT_EVENETS" # 可视化场景, SouthKorea_Songdo, Hongkong_YMT
+SCENARIO_IDX = "Beijing_Changjianglu_Event" # 可视化场景, SouthKorea_Songdo, Hongkong_YMT
 config = SCENARIO_CONFIGS.get(SCENARIO_IDX) # 获取特定场景的配置
 SCENARIO_NAME = config["SCENARIO_NAME"]
 SUMOCFG = config["SUMOCFG"]
@@ -72,6 +72,7 @@ if __name__ == '__main__':
         use_gui=True,
         aircraft_inits=aircraft_inits,
         preset="480P",
+        vehicle_model='low',
         resolution=1,
         base_path=base_path,
     )

@@ -3,7 +3,7 @@ Author: Maonan Wang
 Date: 2025-01-16 18:51:18
 Description: 使用 RL 执行策略并收集信息
 LastEditors: WANG Maonan
-LastEditTime: 2025-07-16 21:08:28
+LastEditTime: 2025-07-29 15:56:33
 '''
 import os
 import torch
@@ -26,7 +26,7 @@ path_convert = get_abs_path(__file__)
 set_logger(path_convert('./'))
 
 # 读取场景配置
-SCENARIO_IDX = "Hongkong_YMT_NORMAL" # 可视化场景, SouthKorea_Songdo, Hongkong_YMT
+SCENARIO_IDX = "Beijing_Changjianglu_Event" # 可视化场景, SouthKorea_Songdo, Hongkong_YMT
 config = SCENARIO_CONFIGS.get(SCENARIO_IDX) # 获取特定场景的配置
 SCENARIO_NAME = config["SCENARIO_NAME"]
 SUMOCFG = config["SUMOCFG"]
