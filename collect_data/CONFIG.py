@@ -4,7 +4,7 @@ Date: 2025-06-25 16:50:28
 LastEditors: WANG Maonan
 Description: 场景信息 (netrwork+route+event) 三个部分组成一个场景
 -> Note: 需要提前在 route 中定义好对应的车辆类型
-LastEditTime: 2025-07-29 16:02:03
+LastEditTime: 2025-07-29 16:35:49
 '''
 SCENARIO_CONFIGS = {
     # ===> Beijing_Beishahe
@@ -63,10 +63,26 @@ SCENARIO_CONFIGS = {
                 "id": "accident_01",  # 事故唯一标识符
                 "depart_time": 100,    # 事故发生的仿真时间（秒）
                 "edge_id": "832511541#0.628",  # 事故 Edge ID
-                "lane_index": 2,          # 发生事故的 lane index
+                "lane_index": 0,          # 发生事故的 lane index
                 "position": 283,    # 在车道上的位置（米）, 车道长度-1
                 "duration": 50,   # 事故持续时间（秒），0=永久
             }, # 事故一
+            {
+                "id": "accident_02",  # 事故唯一标识符
+                "depart_time": 100,    # 事故发生的仿真时间（秒）
+                "edge_id": "832511541#0.628",  # 事故 Edge ID
+                "lane_index": 1,          # 发生事故的 lane index
+                "position": 283,    # 在车道上的位置（米）, 车道长度-1
+                "duration": 50,   # 事故持续时间（秒），0=永久
+            },
+            {
+                "id": "accident_03",  # 事故唯一标识符
+                "depart_time": 100,    # 事故发生的仿真时间（秒）
+                "edge_id": "832511541#0.628",  # 事故 Edge ID
+                "lane_index": 2,          # 发生事故的 lane index
+                "position": 283,    # 在车道上的位置（米）, 车道长度-1
+                "duration": 50,   # 事故持续时间（秒），0=永久
+            }, 
         ],
         "SPECIAL_VEHICLES": [
             {

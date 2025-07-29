@@ -6,7 +6,7 @@ Description: 根据 Infos 来计算专家动作, 具体的步骤为:
 1. 根据 fromEdge_toEdge 获得 lane 对应的 traffic phase 
 2. 检测 in lane 是否存在 emergency, police, fire_engine 且距离路口距离小于 20m，则将其修改为绿灯
 3. 检测 in lane 存在 safety_barriers, 则将这个 traffic phase 进行 mask
-LastEditTime: 2025-07-29 15:28:50
+LastEditTime: 2025-07-29 16:39:55
 '''
 
 class ExpertTrafficSignalController:
@@ -55,8 +55,13 @@ class ExpertTrafficSignalController:
         if emergency_phase is not None:
             return emergency_phase
         
-        # 2. 检查路障并选择最佳相位
-        return self._handle_obstacles(lane_vehicles)
+        # 2. 检查路障
+        obstacle_phase = self._handle_obstacles(lane_vehicles)
+        if obstacle_phase is not None:
+            return obstacle_phase
+        
+        # 3. 没有特殊情况返回None
+        return None
     
     def _group_vehicles_by_lane(self, vehicle_info):
         """将车辆信息按车道分组
@@ -85,7 +90,7 @@ class ExpertTrafficSignalController:
         检查是否有需要优先通行的紧急车辆
         """
         EMERGENCY_TYPES = {'emergency', 'police', 'fire_engine'}
-        EMERGENCY_THRESHOLD = 30  # 距离路口30米内视为紧急
+        EMERGENCY_THRESHOLD = 150  # 距离路口的距离
         
         closest_vehicle_dist = float('inf')
         closest_phase = None
@@ -124,6 +129,10 @@ class ExpertTrafficSignalController:
                 if vehicle['type'] == OBSTACLE_TYPE:
                     blocked_lanes.add(lane_id)
                     break  # 一个车道有一个路障就足够
+        
+        # 没有路障时返回 None, 交还给 RL 决策
+        if not blocked_lanes:
+            return None
         
         # 确定可用的相位 (没有路障的相位)
         valid_phases = []

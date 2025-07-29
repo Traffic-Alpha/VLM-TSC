@@ -3,14 +3,18 @@ Author: WANG Maonan
 Date: 2025-07-10 17:41:22
 LastEditors: WANG Maonan
 Description: 特殊场景使用专家策略
-LastEditTime: 2025-07-25 13:21:30
+LastEditTime: 2025-07-29 16:37:17
 '''
 import os
+import torch
+from stable_baselines3 import PPO
+
 from tshub.utils.get_abs_path import get_abs_path
 from tshub.utils.init_log import set_logger
 from tshub.utils.format_dict import save_str_to_json
 
 from utils.env_utils.make_env import make_env
+from utils.rl_utils.simple_int import IntersectionNet
 
 from CONFIG import SCENARIO_CONFIGS
 from parse_infos.get_expert_action import ExpertTrafficSignalController # 专家决策器
@@ -23,7 +27,7 @@ path_convert = get_abs_path(__file__)
 set_logger(path_convert('./'))
 
 # 读取场景配置
-SCENARIO_IDX = "Hongkong_YMT_EVENETS" # 可视化场景, SouthKorea_Songdo, Hongkong_YMT
+SCENARIO_IDX = "Beijing_Changjianglu_Event" # 可视化场景, SouthKorea_Songdo, Hongkong_YMT
 config = SCENARIO_CONFIGS.get(SCENARIO_IDX) # 获取特定场景的配置
 SCENARIO_NAME = config["SCENARIO_NAME"]
 SUMOCFG = config["SUMOCFG"]
@@ -56,7 +60,20 @@ if __name__ == '__main__':
     # 输出文件夹
     base_path = base_path = path_convert(f"../exp_dataset/{SCENARIO_IDX}/") # 存储路径
     trip_info = path_convert(f"../exp_dataset/{SCENARIO_IDX}/tripinfo_fix.out.xml")
-    
+
+    # Load Model
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model_path = path_convert(f"../rl_tsc/{SCENARIO_IDX}_models/last_rl_model.zip")
+    policy_kwargs = dict(
+        features_extractor_class=IntersectionNet,
+        features_extractor_kwargs=dict(features_dim=32),
+    )
+    model = PPO.load(
+        model_path, 
+        device=device,
+        custom_objects={"policy_kwargs": policy_kwargs}
+    )
+
     # Init Env
     tsc_env = make_env(
         tls_id=tls_id,
@@ -80,11 +97,18 @@ if __name__ == '__main__':
     dones = False
     # 初始化环境
     rl_state, infos = tsc_env.reset()
+    
     # 初始化专家决策
-    expert_decision = ExpertTrafficSignalController(tls_id=tls_id, raw_infos=infos)
+    expert_decision = ExpertTrafficSignalController(tls_id=tls_id, raw_infos=infos) 
     
     while not dones:
         decision = expert_decision.decide(infos['state']['vehicle'])
+        if decision is None: # 如果不是特殊情况, 则使用 RL 的决策
+            decision, _ = model.predict(rl_state, deterministic=True)
+            decision = decision.item()
+        else:
+            print(f"--> 使用专家决策特殊情况 {decision}")
+
         rl_state, rewards, truncated, dones, infos = tsc_env.step(action=decision)
 
     # 存储全局信息
