@@ -6,24 +6,7 @@ Description: 根据 Infos 来计算专家动作, 具体的步骤为:
 1. 根据 fromEdge_toEdge 获得 lane 对应的 traffic phase 
 2. 检测 in lane 是否存在 emergency, police, fire_engine 且距离路口距离小于 20m，则将其修改为绿灯
 3. 检测 in lane 存在 safety_barriers, 则将这个 traffic phase 进行 mask
-
-现在你是一个 Python 专家，请你帮助我写出一个专家策略的类给信号灯控制，根据当前环境的信息作出决策，需要有两个特殊场景
-1. 当前某个车道存在特殊车辆
-2. 当某个车道由于路障无法通行
-于是你的思路是类在初始化的时候，首先获得每个 in lane 对应的 traffic phase 和 lane 的长度
-你有每个 traffic phase 对应的 movment
-'phase2movements': {0: ['1200878753#0--s', '1200878753#0--l', '102454134#0--s'], 1: ['30658263#0--s', '960661806#0--s'], 2: ['30658263#0--r']}
-同时你有每一个 movement 对应的车道，如下所是：
-'movement_lane_ids': {'1200878753#0--s': ['1200878753#0_0', '1200878753#0_1'], '1200878753#0--l': ['1200878753#0_2', '1200878753#0_2'], '30658263#0--r': ['30658263#0_0', '30658263#0_0'], '30658263#0--s': ['30658263#0_1', '30658263#0_1', '30658263#0_2'], '102454134#0--s': ['102454134#0_0', '102454134#0_1', '102454134#0_2'], '960661806#0--s': ['960661806#0_0', '960661806#0_1', '960661806#0_2']}
-同时你还有一个 dict 记录每个 lane 的长度
-
-根据上面的信息你可以获得每个 in lane 所属于的 movement
-
-接着你分析每个时刻的车辆信息，
-如果在 in lane 存在 emergency, police, fire_engine，且接近路口，则快速给予绿灯使其通行；
-检测 in lane 存在 safety_barriers, 则将这个 traffic phase 进行 mask，在剩下的 traffic phase 选择等待车辆多的 traffic phase
-最后输出 traffic phase index
-LastEditTime: 2025-07-16 17:17:52
+LastEditTime: 2025-07-29 15:28:50
 '''
 
 class ExpertTrafficSignalController:
