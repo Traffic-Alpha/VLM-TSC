@@ -1,0 +1,3 @@
+# @package _global_
+NETFILE: "./networks/easy.net.xml"
+SUMOCFG: "easy_increasing_demand.sumocfg"

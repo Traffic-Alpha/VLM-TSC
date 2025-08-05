@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - /presets/${oc.env:MAP,Beijing_Beihuan}/${oc.env:SCENE,easy_high_density_none}
+
+map: ${oc.env:MAP,Beijing_Beihuan}
+scene: ${oc.env:SCENE,easy_high_density_none}

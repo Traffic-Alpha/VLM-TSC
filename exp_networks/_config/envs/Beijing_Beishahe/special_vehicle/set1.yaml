@@ -1,0 +1,10 @@
+# @package _global_
+SPECIAL_VEHICLES:
+  - id: police_01
+    type: police
+    depart_time: 75
+    route: ["741602130.216", "657921286#1"]
+  - id: ambulance_02
+    type: emergency
+    depart_time: 100
+    route: ["657921289.337", "657921286#1"]

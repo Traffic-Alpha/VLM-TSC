@@ -1,0 +1,16 @@
+# @package _global_
+ACCIDENTS:
+  - id: accident_01
+    depart_time: 60
+    edge_id: "741602130.216"
+    lane_index: 2
+    position: 167
+    type: "barrier_B"
+    duration: 120
+  - id: accident_02
+    depart_time: 260
+    edge_id: "657921284.293"
+    lane_index: 2
+    position: 167
+    type: "barrier_C"
+    duration: 120

@@ -1,0 +1,3 @@
+# @package _global_
+NETFILE: "./networks/normal.net.xml"
+SUMOCFG: "normal_increasing_demand.sumocfg"
