@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - /envs/Beijing_Beishahe/base
+  - /envs/Beijing_Beishahe/accident/set1
+  - /envs/Beijing_Beishahe/special_vehicle/set1
+  - /network_routes/easy_high_density

@@ -1,0 +1,16 @@
+# @package _global_
+ACCIDENTS:
+  - id: accident_01
+    "depart_time": 93
+    "edge_id": "252712271#0.589"
+    "lane_index": 0
+    "position": 290.5
+    type: "other_accidents"  # 需要使用 other accidents 占位
+    "duration": 117
+  - id: accident_02
+    "depart_time": 93
+    "edge_id": "252712271#0.589"
+    "lane_index": 1
+    "position": 290.5
+    type: "pedestrian"
+    "duration": 117

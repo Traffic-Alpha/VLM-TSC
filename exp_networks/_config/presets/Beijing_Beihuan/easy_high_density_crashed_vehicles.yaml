@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - /envs/Beijing_Beihuan/base
+  - /envs/Beijing_Beihuan/accident/set4_crashed_vehicle
+  - /envs/Beijing_Beihuan/special_vehicle/set1
+  - /network_routes/easy_high_density

@@ -5,12 +5,14 @@ LastEditors: WANG Maonan
 Description: 使用随机策略收集信息, 修改不同的配置文件
 MAP: Beijing_Beihuan, Beijing_Beishahe
 
--> MAP=Beijing_Beishahe SCENE=easy_high_density_none python collect_data_random.py
--> MAP=Beijing_Beishahe SCENE=easy_high_density_event python collect_data_random.py
+-> MAP=Beijing_Beihuan SCENE=easy_high_density_barrier python collect_data_random.py
+-> MAP=Beijing_Beihuan SCENE=easy_high_density_tree_branch python collect_data_random.py
+-> MAP=Beijing_Beihuan SCENE=easy_high_density_pedestrain python collect_data_random.py
+-> MAP=Beijing_Beihuan SCENE=easy_high_density_crashed_vehicles python collect_data_random.py
 
 可以使用预设的配置文件, 通过 selector 文件
 也可以自己组合文件
-LastEditTime: 2025-08-05 13:57:39
+LastEditTime: 2025-08-06 20:31:59
 '''
 import os
 import random
