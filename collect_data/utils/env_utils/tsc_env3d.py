@@ -3,7 +3,7 @@ Author: Maonan Wang
 Date: 2025-01-15 16:53:53
 Description: 信号灯控制环境 3D
 LastEditors: WANG Maonan
-LastEditTime: 2025-07-28 21:52:26
+LastEditTime: 2025-08-01 15:26:42
 '''
 import gymnasium as gym
 from loguru import logger
@@ -113,6 +113,7 @@ class TSCEnvironment3D(gym.Env):
         position = accident_config["position"]
         duration = accident_config["duration"]
         depart_time = accident_config["depart_time"]
+        veh_type = accident_config["type"]
         
 
         # 创建临时路线
@@ -123,7 +124,7 @@ class TSCEnvironment3D(gym.Env):
         self.conn.vehicle.add(
             vehID=veh_id,
             routeID=route_id,
-            typeID="safety_barriers",  # 直接设置为路障类型
+            typeID=veh_type, # 支持不同的障碍物
             depart=depart_time,  # 在指定时间出现
             departLane=lane_index,
             departPos=position,  # 直接在目标位置出现 (车辆较多的时候无法马上出现)
