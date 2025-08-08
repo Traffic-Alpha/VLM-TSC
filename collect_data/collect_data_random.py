@@ -3,16 +3,16 @@ Author: WANG Maonan
 Date: 2025-06-25 16:45:03
 LastEditors: WANG Maonan
 Description: 使用随机策略收集信息, 修改不同的配置文件
-MAP: Beijing_Beihuan, Beijing_Beishahe
+MAP: Beijing_Beihuan, Beijing_Beishahe, France_Massy
 
--> MAP=Beijing_Beihuan SCENE=easy_high_density_barrier python collect_data_random.py
--> MAP=Beijing_Beihuan SCENE=easy_high_density_tree_branch python collect_data_random.py
--> MAP=Beijing_Beihuan SCENE=easy_high_density_pedestrain python collect_data_random.py
--> MAP=Beijing_Beihuan SCENE=easy_high_density_crashed_vehicles python collect_data_random.py
+-> MAP=France_Massy SCENE=easy_high_density_barrier python collect_data_random.py
+-> MAP=France_Massy SCENE=easy_high_density_tree_branch python collect_data_random.py
+-> MAP=France_Massy SCENE=easy_high_density_pedestrain python collect_data_random.py
+-> MAP=France_Massy SCENE=easy_high_density_crashed_vehicles python collect_data_random.py
 
 可以使用预设的配置文件, 通过 selector 文件
 也可以自己组合文件
-LastEditTime: 2025-08-06 20:31:59
+LastEditTime: 2025-08-07 18:31:59
 '''
 import os
 import random
@@ -24,7 +24,6 @@ from tshub.utils.init_log import set_logger
 from tshub.utils.format_dict import save_str_to_json
 
 from utils.env_utils.make_env import make_env
-from CONFIG import SCENARIO_CONFIGS
  
 def convert_rgb_to_bgr(image):
     # Convert an RGB image to BGR
