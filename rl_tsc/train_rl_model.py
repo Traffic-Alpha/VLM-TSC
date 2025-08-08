@@ -5,10 +5,13 @@
 + State Design: Junction Matrix
 + Action Design: Choose Next Phase 
 + Reward Design: Total Waiting Time
-LastEditTime: 2025-07-29 15:18:17
++ Command Example: MAP=France_Massy SCENE=easy_high_density_none python train_rl_model.py
+LastEditTime: 2025-08-08 13:21:05
 '''
 import os
 import torch
+import hydra
+from omegaconf import DictConfig, OmegaConf
 from loguru import logger
 from tshub.utils.get_abs_path import get_abs_path
 from tshub.utils.init_log import set_logger
@@ -21,22 +24,29 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
 from stable_baselines3.common.callbacks import CallbackList, CheckpointCallback
 
-from CONFIG import SCENARIO_CONFIGS
-
 path_convert = get_abs_path(__file__)
 logger.remove()
 set_logger(path_convert('./'), file_log_level="INFO")
 
-if __name__ == '__main__':
-    SCENARIO_IDX = "Beijing_Changjianglu_Test" # 可视化场景, SouthKorea_Songdo, Hongkong_YMT
-    config = SCENARIO_CONFIGS.get(SCENARIO_IDX) # 获取特定场景的配置
-    SCENARIO_NAME = config["SCENARIO_NAME"]
-    SUMOCFG = config["SUMOCFG"] # config 路径名
-    PHASE_NUMBER = config["PHASE_NUMBER"] # 绿灯相位数量, action space
-    MOVEMENT_NUMBER = config["MOVEMENT_NUMBER"] # 有效 movement 的数量, observation space
-    NUM_SECONDS = config["NUM_SECONDS"] # 仿真时间
-    JUNCTION_NAME = config["JUNCTION_NAME"]
-    
+@hydra.main(
+    config_path=path_convert("../exp_networks/_config/"), # 配置文件所在的文件夹
+    config_name="selector"
+)
+def main(cfg: DictConfig):
+    OmegaConf.resolve(cfg) # 解析 cfg
+    print(f"Running on map: {cfg.map}")
+    print(f"Using scene: {cfg.scene}")
+    # 读取场景配置
+    SCENARIO_IDX = f"{cfg.map}_{cfg.scene}" # 场景 id
+    # base
+    SCENARIO_NAME = cfg.SCENARIO_NAME
+    JUNCTION_NAME = cfg.JUNCTION_NAME
+    NUM_SECONDS = cfg.NUM_SECONDS # 仿真时间
+    PHASE_NUMBER = cfg.PHASE_NUMBER # 绿灯相位数量
+    MOVEMENT_NUMBER = cfg.MOVEMENT_NUMBER # 有效 movement 的数量
+    # networks & sumocfg
+    SUMOCFG = cfg.SUMOCFG
+
     log_path = path_convert(f'./{SCENARIO_IDX}_log/')
     model_path = path_convert(f'./{SCENARIO_IDX}_models/')
     tensorboard_path = path_convert(f'./{SCENARIO_IDX}_tensorboard/')
@@ -46,7 +56,7 @@ if __name__ == '__main__':
         os.makedirs(model_path)
     if not os.path.exists(tensorboard_path):
         os.makedirs(tensorboard_path)
-    
+
     # #########
     # Init Env
     # #########
@@ -105,3 +115,6 @@ if __name__ == '__main__':
     print('训练结束, 达到最大步数.')
 
     env.close()
+
+if __name__ == '__main__':
+    main()

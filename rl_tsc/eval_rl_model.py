@@ -1,34 +1,44 @@
 '''
 Author: Maonan Wang
 Date: 2025-01-15 17:26:22
-LastEditTime: 2025-07-10 17:32:49
-LastEditors: WANG Maonan
 Description: 测试 RL 的模型, 可视化 & 输出 tripinfo
-FilePath: /VLM-TSC/state_based_rl/eval_rl_model.py
++ Command Example: MAP=France_Massy SCENE=easy_high_density_none python eval_rl_model.py
+LastEditTime: 2025-08-08 13:20:51
+LastEditors: WANG Maonan
 '''
 import torch
+import hydra
+from omegaconf import DictConfig, OmegaConf
 from loguru import logger
 from tshub.utils.get_abs_path import get_abs_path
 
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import VecNormalize, SubprocVecEnv
 
-from CONFIG import SCENARIO_CONFIGS
 from utils.env_utils.make_tsc_env import make_env
 
 path_convert = get_abs_path(__file__)
 logger.remove()
 
-if __name__ == '__main__':
-    SCENARIO_IDX = "Hongkong_YMT_NORMAL" # 可视化场景, SouthKorea_Songdo, Hongkong_YMT
-    config = SCENARIO_CONFIGS.get(SCENARIO_IDX) # 获取特定场景的配置
-    SCENARIO_NAME = config["SCENARIO_NAME"]
-    SUMOCFG = config["SUMOCFG"] # config 路径名
-    PHASE_NUMBER = config["PHASE_NUMBER"] # 绿灯相位数量, action space
-    MOVEMENT_NUMBER = config["MOVEMENT_NUMBER"] # 有效 movement 的数量, observation space
-    NUM_SECONDS = config["NUM_SECONDS"] # 仿真时间
-    JUNCTION_NAME = config["JUNCTION_NAME"]
-    
+@hydra.main(
+    config_path=path_convert("../exp_networks/_config/"), # 配置文件所在的文件夹
+    config_name="selector"
+)
+def main(cfg: DictConfig):
+    OmegaConf.resolve(cfg) # 解析 cfg
+    print(f"Running on map: {cfg.map}")
+    print(f"Using scene: {cfg.scene}")
+    # 读取场景配置
+    SCENARIO_IDX = f"{cfg.map}_{cfg.scene}" # 场景 id
+    # base
+    SCENARIO_NAME = cfg.SCENARIO_NAME
+    JUNCTION_NAME = cfg.JUNCTION_NAME
+    NUM_SECONDS = cfg.NUM_SECONDS # 仿真时间
+    PHASE_NUMBER = cfg.PHASE_NUMBER # 绿灯相位数量
+    MOVEMENT_NUMBER = cfg.MOVEMENT_NUMBER # 有效 movement 的数量
+    # networks & sumocfg
+    SUMOCFG = cfg.SUMOCFG
+
     # #########
     # Init Env
     # #########
@@ -65,3 +75,6 @@ if __name__ == '__main__':
         
     env.close()
     print(f'累积奖励为, {total_reward}.')
+
+if __name__ == '__main__':
+    main()
