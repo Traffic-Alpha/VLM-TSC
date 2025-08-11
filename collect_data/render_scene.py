@@ -2,42 +2,62 @@
 Author: WANG Maonan
 Date: 2025-06-25 18:21:04
 LastEditors: WANG Maonan
-Description: 精细化场景渲染
-LastEditTime: 2025-06-30 15:43:31
+Description: Render Junction Scenarios
+LastEditTime: 2025-08-11 17:31:49
 '''
 import os
 import sys
 import time
+import argparse
 
-tshub_path = "/home/tshub/Code_Project/2_Traffic/TransSimHub/"
-sys.path.insert(0, tshub_path + "tshub/tshub_env3d/")
-
-from vis3d_blender_render import TimestepRenderer, VehicleManager
-
-# 配置文件路径
-START_TIMESTEP = 0 # 开始渲染的时间
-END_TIMESTEP = 68 # 结束渲染的时间
-MODELS_BASE_PATH = f"{tshub_path}/tshub/tshub_env3d/_assets_3d/vehicles/" # 需要渲染的模型
-SCENARIO_PATH = "/home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/exp_dataset/Hongkong_YMT/" # 场景所在的环境
+def parse_args():
+    """解析 Blender 传递的参数"""
+    # 提取 '--' 之后的参数
+    argv = sys.argv
+    if "--" not in argv:
+        return {}
+    args = argv[argv.index("--") + 1:]
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--tshub", type=str, required=True, help="TransSimHub 根目录") # 加载 tshub 3d render lib
+    parser.add_argument("--scenario", type=str, required=True, help="场景数据路径")
+    parser.add_argument("--start", type=int, default=266, help="起始时间步")
+    parser.add_argument("--end", type=int, default=266, help="结束时间步")
+    parser.add_argument("--models", type=str, default="high_poly", choices=["high_poly", "low_poly"], help="车辆模型精度")
+    
+    return parser.parse_args(args)
 
 def main():
-    """主执行函数"""
+    args = parse_args()
+
+    # 动态设置模型路径
+    models_base_path = os.path.join(
+        args.tshub, 
+        "tshub/tshub_env3d/_assets_3d/",
+        f"vehicles_{args.models}/"  # 根据参数选择high_poly或low_poly
+    )
+    # 添加tshub到系统路径
+    sys.path.insert(0, os.path.join(args.tshub, "tshub/tshub_env3d/"))
+    
+    # 动态导入（确保路径设置后再导入）
+    from vis3d_blender_render import TimestepRenderer, VehicleManager
+
     try:
         # 初始化管理器
-        vehicle_mgr = VehicleManager(MODELS_BASE_PATH)
+        vehicle_mgr = VehicleManager(models_base_path) # 加载特定的车辆模型
         renderer = TimestepRenderer(
-            resolution=480, 
+            resolution=480,
             render_mask=False, 
             render_depth=False
-        )
+        ) # 渲染场景的每一个时刻
 
         # 初始化计时变量
         total_start_time = time.time()
         timestep_times = []
 
         # 遍历所有时刻
-        for timestep in range(START_TIMESTEP, END_TIMESTEP + 1):
-            scenario_timestep_path = os.path.join(SCENARIO_PATH, str(timestep)) # 存储的文件夹
+        for timestep in range(args.start, args.end + 1):
+            scenario_timestep_path = os.path.join(args.scenario, str(timestep)) # 存储的文件夹
             json_path = os.path.join(scenario_timestep_path, "3d_vehs.json")
             
             if not os.path.exists(json_path):
@@ -81,4 +101,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-# blender /home/tshub/Code_Project/2_Traffic/sim_envs/Hongkong_YMT/blender/HK_YMT.blend --background --python /home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/collect_data/generate_3d.py
