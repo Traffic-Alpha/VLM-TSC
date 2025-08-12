@@ -3,8 +3,8 @@ Author: WANG Maonan
 Date: 2025-07-10 17:41:22
 LastEditors: WANG Maonan
 Description: 专家策略, rl+rule
-+ Command Example: MAP=France_Massy SCENE=easy_high_density_barrier python collect_data_expert.py
-LastEditTime: 2025-08-08 13:32:29
++ Command Example: MAP=France_Massy SCENE=easy_random_perturbation_barrier python collect_data_expert.py
+LastEditTime: 2025-08-12 11:51:51
 '''
 import os
 import torch

@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-06-30 22:04:19
 LastEditors: WANG Maonan
 Description: Simple Network for the Junction
-LastEditTime: 2025-07-08 17:51:17
+LastEditTime: 2025-08-11 18:25:00
 '''
 import torch
 import torch.nn as nn
@@ -45,7 +45,7 @@ class IntersectionNet(BaseFeaturesExtractor):
             batch_first=True
         )
         
-        # 计算最终输出维度（双向LSTM则 *2）
+        # 计算最终输出维度（双向 LSTM*2）
         self.lstm_output_dim = lstm_hidden_dim * 2 if bidirectional else lstm_hidden_dim
 
         # 特征输出层

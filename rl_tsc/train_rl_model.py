@@ -4,9 +4,9 @@
 @Description: Train RL-based TSC
 + State Design: Junction Matrix
 + Action Design: Choose Next Phase 
-+ Reward Design: Total Waiting Time
-+ Command Example: MAP=France_Massy SCENE=easy_high_density_none python train_rl_model.py
-LastEditTime: 2025-08-08 13:21:05
++ Reward Design: Average Queue Length
++ Command Example: MAP=France_Massy SCENE=easy_random_perturbation_none python train_rl_model.py
+LastEditTime: 2025-08-12 11:27:06
 '''
 import os
 import torch

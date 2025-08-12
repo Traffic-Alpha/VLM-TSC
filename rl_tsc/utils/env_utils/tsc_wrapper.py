@@ -3,8 +3,8 @@
 @Date: 2023-09-08 15:49:30
 @Description: 处理 TSCHub ENV 中的 state, reward
 + state: 5 个时刻的每一个 movement 的 queue length
-+ reward: 路口总的 waiting time
-LastEditTime: 2025-07-10 17:31:53
++ reward: Queue Length
+LastEditTime: 2025-08-11 18:05:52
 '''
 import numpy as np
 import gymnasium as gym
@@ -34,7 +34,7 @@ class TSCEnvWrapper(gym.Wrapper):
         self.phase_num = phase_num
         self.buffer_idx = 0
         self.states = np.zeros(
-            (self.max_states_length, self.movement_num, 6), 
+            (self.max_states_length, self.movement_num, 7), 
             dtype=np.float32
         )
     
@@ -45,9 +45,9 @@ class TSCEnvWrapper(gym.Wrapper):
     @property
     def observation_space(self):
         obs_space = gym.spaces.Box(
-            low=np.zeros((self.max_states_length, self.movement_num, 6), dtype=np.float32),
-            high=np.ones((self.max_states_length, self.movement_num, 6), dtype=np.float32),
-            shape=(self.max_states_length, self.movement_num, 6)
+            low=np.zeros((self.max_states_length, self.movement_num, 7), dtype=np.float32),
+            high=np.ones((self.max_states_length, self.movement_num, 7), dtype=np.float32),
+            shape=(self.max_states_length, self.movement_num, 7)
         ) # self.states 是一个时间序列
         return obs_space
     
@@ -61,26 +61,38 @@ class TSCEnvWrapper(gym.Wrapper):
 
         # 处理特征向量
         tls_state = vector[self.tls_id]
-        process_obs = [] # 每一行是一个 movement 的信息, (num_movement, 6)
+        process_obs = [] # 每一行是一个 movement 的信息, (num_movement, 7)
         for _movement_index, _movement_id in enumerate(self.movement_ids):
-            occupancy = tls_state['last_step_occupancy'][_movement_index]/100
+            occupancy = tls_state['last_step_occupancy'][_movement_index]/100 # 占有率, 有车在上面也是占有
+            queue_length = tls_state['jam_length_vehicle'][_movement_index]/10 # 车辆停止并且排队
             direction_flags = self._direction_to_flags(tls_state['movement_directions'][_movement_id])
             lane_numbers = tls_state['movement_lane_numbers'][_movement_id]/5
-            is_now_phase = int(tls_state['this_phase'][_movement_index])
+            is_now_phase = int(tls_state['this_phase'][_movement_index]) # s
             # 处理完毕一个 traffic phase 的信息
-            process_obs.append([occupancy, is_now_phase, *direction_flags, lane_numbers]) # 后面两类变量不变
+            process_obs.append([occupancy, queue_length, is_now_phase, *direction_flags, lane_numbers]) # 后面两类变量不变
             
         can_perform_action = vector[self.tls_id]['can_perform_action']
 
         return process_obs, can_perform_action
     
     def reward_wrapper(self, states) -> float:
-        """返回整个路口的排队长度的平均值
+        """返回基于平均等待时间的奖励
         """
+        vehicle_data = states['vehicle']
+        num_vehicles = len(vehicle_data)
+        
+        # 处理空路口情况（无车辆）
+        if num_vehicles == 0:
+            return 0.0  # 中性奖励，鼓励保持畅通状态
+        
+        # 计算总等待时间
         total_waiting_time = 0
-        for _, veh_info in states['vehicle'].items():
-            total_waiting_time += veh_info['waiting_time']
-        return -total_waiting_time
+        for _, veh_info in vehicle_data.items():
+            total_waiting_time += veh_info['accumulated_waiting_time']
+        
+        # 计算平均等待时间并返回负值（最小化等待）
+        average_waiting_time = total_waiting_time / num_vehicles
+        return -average_waiting_time
 
     def _direction_to_flags(self, direction):
         """
