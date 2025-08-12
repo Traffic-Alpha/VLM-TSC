@@ -3,12 +3,13 @@ Author: WANG Maonan
 Date: 2025-06-30 15:37:30
 LastEditors: WANG Maonan
 Description: 将渲染的结果存储为 gif 文件
-LastEditTime: 2025-07-14 12:38:56
+LastEditTime: 2025-08-12 11:34:56
 '''
 import os
 import imageio
 from PIL import Image
 from tqdm import tqdm
+from PIL import Image, ImageDraw, ImageFont
 
 from tshub.utils.get_abs_path import get_abs_path
 path_convert = get_abs_path(__file__)
@@ -25,6 +26,8 @@ def create_gif_from_subdirs(
     start_num=None,  # 开始的数字编号
     end_num=None,    # 结束的数字编号
     verbose=True,
+    add_timestamp=False,  # 是否添加时间戳
+    timestamp_format="Time: {}"  # 时间戳格式
 ):
     """
     Create GIFs from images with the same name in different subdirectories.
@@ -78,6 +81,39 @@ def create_gif_from_subdirs(
             width_percent = (gif_width / float(img.size[0]))
             height_size = int((float(img.size[1]) * float(width_percent)))
             img_resized = img.resize((gif_width, height_size), Image.Resampling.LANCZOS)
+
+            # 添加时间戳（新增功能）
+            if add_timestamp:
+                draw = ImageDraw.Draw(img_resized)
+                try:
+                    # 尝试加载字体（支持跨平台）
+                    font = ImageFont.truetype("arial.ttf", max(12, int(img_resized.height * 0.04)))
+                except:
+                    # 回退到默认字体
+                    font = ImageFont.load_default()
+                
+                # 准备时间戳文本
+                timestamp_text = timestamp_format.format(subdir)
+                bbox = draw.textbbox((0, 0), timestamp_text, font=font)
+                text_width = bbox[2] - bbox[0]
+                text_height = bbox[3] - bbox[1]
+                
+                # 计算位置（右上角）
+                margin = int(img_resized.height * 0.02)
+                position = (img_resized.width - text_width - margin, margin)
+                
+                # 添加背景框增强可读性
+                bg_margin = 2
+                bg_box = (
+                    position[0] - bg_margin,
+                    position[1] - bg_margin,
+                    position[0] + text_width + bg_margin,
+                    position[1] + text_height + bg_margin
+                )
+                draw.rectangle(bg_box, fill="black")
+                
+                # 添加时间戳文本
+                draw.text(position, timestamp_text, fill="white", font=font)
             images_for_gif.append(img_resized)
     
     if not images_for_gif:
@@ -108,10 +144,12 @@ def create_gif_from_subdirs(
     return output_path
 
 # Example usage:
-create_gif_from_subdirs(
-    root_dir=path_convert("./exp_dataset/Hongkong_YMT_rl/"),
-    subfolder="high_quality_rgb",
-    image_name='cam_path_1',
-    start_num=110,
-    end_num=220,
-)
+for _image_name in ['0', '1', '2', 'bev']:
+    create_gif_from_subdirs(
+        root_dir=path_convert("./exp_dataset/France_Massy_easy_fluctuating_commuter_none/"),
+        subfolder="high_quality_rgb",
+        image_name=_image_name,
+        start_num=20,
+        end_num=600,
+        add_timestamp=True
+    )
