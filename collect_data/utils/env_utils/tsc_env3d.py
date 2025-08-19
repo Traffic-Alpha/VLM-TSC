@@ -1,9 +1,9 @@
 '''
 Author: Maonan Wang
 Date: 2025-01-15 16:53:53
-Description: 信号灯控制环境 3D
+Description: 信号灯控制环境 3D (Special Vehicles & Special Accidents)
 LastEditors: WANG Maonan
-LastEditTime: 2025-08-01 15:26:42
+LastEditTime: 2025-08-19 16:14:41
 '''
 import gymnasium as gym
 from loguru import logger
@@ -71,12 +71,20 @@ class TSCEnvironment3D(gym.Env):
         self.accident_configs = accident_config or []
         self.special_vehicle_configs = special_vehicle_config or []
 
+        # 判断事故车辆是否插入
+        self.pending_vehicles = {}  # 存储待插入的车辆信息
+        self.inserted_vehicles = set()  # 存储已插入的车辆ID
+
     def reset(self):
         state_infos = self.tsc_env.reset()
         self.conn = self.tsc_env.tshub_env.sumo # 获得 sumo 连接
         new_state = {'state': state_infos, 'pixel': None, 'veh_3d_elements':None}
 
-        # 创建所有事故车辆（立即创建，但设置出发时间）
+        # 清空待插入车辆记录
+        self.pending_vehicles = {}
+        self.inserted_vehicles = set()
+
+        # 创建所有事故车辆（初始化事故，step 的时候再创建）
         for accident in self.accident_configs:
             self._create_accident_vehicle(accident)
         
@@ -87,11 +95,42 @@ class TSCEnvironment3D(gym.Env):
         return new_state
         
     def step(self, action:Dict[str, Dict[str, int]]):
-
         action = {
             'vehicle': dict(), 
             'tls': action
         } # 这里只控制 tls 即可
+
+        # 在环境 step 前检查并插入到达出发时间的车辆
+        current_time = self.conn.simulation.getTime()
+        for veh_id, veh_info in list(self.pending_vehicles.items()):
+            if veh_id not in self.inserted_vehicles and current_time >= veh_info['depart_time']:
+                # 插入车辆
+                self.conn.vehicle.add(
+                    vehID=veh_id,
+                    routeID=veh_info['route_id'],
+                    typeID=veh_info['veh_type'],
+                    depart="now",
+                    departLane=veh_info['lane_index'],
+                    departPos=veh_info['position'],
+                    departSpeed=0,
+                )
+                # 立即移动到指定位置
+                self.conn.vehicle.moveTo(
+                    vehID=veh_id,
+                    laneID=f"{veh_info['edge_id']}_{veh_info['lane_index']}",
+                    pos=veh_info['position']
+                )
+                # 设置持续时间
+                self.conn.vehicle.setStop(
+                    vehID=veh_id,
+                    edgeID=veh_info['edge_id'],
+                    pos=veh_info['position'],
+                    laneIndex=veh_info['lane_index'],
+                    duration=veh_info['duration']
+                )
+                # 加入到已经添加的车辆
+                self.inserted_vehicles.add(veh_id)
+
         states, rewards, infos, dones, sensor_datas = self.tsc_env.step(action)
         sensor_data = sensor_datas['image'] # 获得图片数据
         vehicle_elements = sensor_datas['veh_elements'] # 车辆数据
@@ -115,36 +154,27 @@ class TSCEnvironment3D(gym.Env):
         depart_time = accident_config["depart_time"]
         veh_type = accident_config["type"]
         
-
         # 创建临时路线
         route_id = f"route_{veh_id}"
         self.conn.route.add(route_id, [edge_id])
         
-        # 添加事故车辆（直接设置为路障类型）
-        self.conn.vehicle.add(
-            vehID=veh_id,
-            routeID=route_id,
-            typeID=veh_type, # 支持不同的障碍物
-            depart=depart_time,  # 在指定时间出现
-            departLane=lane_index,
-            departPos=position,  # 直接在目标位置出现 (车辆较多的时候无法马上出现)
-            departSpeed=0
-        )
-        
-        # 设置停止
-        self.conn.vehicle.setStop(
-            vehID=veh_id,
-            edgeID=edge_id,
-            pos=position,
-            laneIndex=lane_index,
-            duration=duration
-        )
+        # 存储车辆信息，等待step时插入
+        self.pending_vehicles[veh_id] = {
+            'route_id': route_id,
+            'edge_id': edge_id,
+            'lane_index': lane_index,
+            'position': position,
+            'duration': duration,
+            'depart_time': depart_time,
+            'veh_type': veh_type,
+            'is_accident': True
+        }
 
         logger.info(f"SIM: 事故路障 {veh_id} 将在 {depart_time} 秒出现在 {edge_id}-{lane_index} 的 {position} 米处")
         return True
-    
+             
     def _create_special_vehicle(self, vehicle_config):
-        """创建特殊车辆（救护车、警车等）
+        """创建特殊车辆（救护车、警车等），在 reset 的时候提前创建好
         """
         veh_id = vehicle_config["id"]
         route_edges = vehicle_config["route"]
