@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-08-14 15:38:00
 LastEditors: WANG Maonan
 Description: 将 JSON 转换为 QA
-LastEditTime: 2025-08-19 17:59:00
+LastEditTime: 2025-08-19 18:25:08
 '''
 # Distance thresholds in meters (adjustable)
 CLOSE_RANGE = 30  # Clear visibility zone
@@ -163,7 +163,7 @@ class TrafficLightVQA:
                     closest_vehicle = v
         
         # 如果找到特殊车辆，构建详细回答
-        if closest_vehicle:
+        if closest_vehicle and closest_distance<self.max_distance:
             vehicle_type = closest_vehicle['vehicle_type']
             distance = closest_vehicle['distance_to_intersection']
             veh_road = closest_vehicle['road_id']
