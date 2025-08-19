@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-08-14 15:38:00
 LastEditors: WANG Maonan
 Description: 将 JSON 转换为 QA
-LastEditTime: 2025-08-14 16:29:08
+LastEditTime: 2025-08-19 17:59:00
 '''
 # Distance thresholds in meters (adjustable)
 CLOSE_RANGE = 30  # Clear visibility zone
@@ -166,21 +166,34 @@ class TrafficLightVQA:
         if closest_vehicle:
             vehicle_type = closest_vehicle['vehicle_type']
             distance = closest_vehicle['distance_to_intersection']
+            veh_road = closest_vehicle['road_id']
             
-            # 将车辆类型转换为更友好的名称
             type_mapping = {
                 'police': 'police car',
                 'emergency': 'ambulance',
                 'fire_engine': 'fire truck',
             }
             friendly_type = type_mapping.get(vehicle_type, vehicle_type)
-            
-            if distance < self.max_distance:
-                if distance < 50:
-                    answer = f"Yes, there is a {friendly_type} approaching the junction (about {distance:.1f}m away)."
+
+            # Determine movement status first
+            if veh_road == self.in_road:
+                movement = "entering"
+                position_desc = f"approaching the junction (about {distance:.1f}m away)"
+            else:
+                movement = "exiting"
+                position_desc = f"moving away from the junction (about {distance:.1f}m from the intersection)"
+
+            # Adjust distance description based on movement
+            if distance < 50:
+                if movement == "entering":
+                    dist_desc = f"nearing the junction (about {distance:.1f}m away)"
                 else:
-                    answer = f"Yes, there is a {friendly_type} in the area, but it's still over 50m away from the junction (about {distance:.1f}m)."
-        
+                    dist_desc = f"just left the junction (about {distance:.1f}m away)"
+            else:
+                dist_desc = position_desc
+
+            answer = f"Yes, there is a {friendly_type} {dist_desc}. The vehicle is {movement} the intersection."
+
         return {'question': question, 'answer': answer}
     
     def _generate_existing_accident(self):
