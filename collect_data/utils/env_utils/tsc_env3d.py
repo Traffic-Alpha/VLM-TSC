@@ -3,7 +3,7 @@ Author: Maonan Wang
 Date: 2025-01-15 16:53:53
 Description: 信号灯控制环境 3D (Special Vehicles & Special Accidents)
 LastEditors: WANG Maonan
-LastEditTime: 2025-08-19 16:14:41
+LastEditTime: 2025-08-19 17:30:35
 '''
 import gymnasium as gym
 from loguru import logger
@@ -104,6 +104,17 @@ class TSCEnvironment3D(gym.Env):
         current_time = self.conn.simulation.getTime()
         for veh_id, veh_info in list(self.pending_vehicles.items()):
             if veh_id not in self.inserted_vehicles and current_time >= veh_info['depart_time']:
+                # 查看当前这个 lane 上面是否有车等待, 有的话就删除
+                lane_id = f"{veh_info['edge_id']}_{veh_info['lane_index']}"
+                lane_vehicles = self.conn.lane.getLastStepVehicleIDs(lane_id) # 获取当前车道上的所有车辆
+                # 检查是否有车辆在目标位置附近
+                for existing_veh in lane_vehicles:
+                    existing_pos = self.conn.vehicle.getLanePosition(existing_veh)
+                    # 如果现有车辆位置与目标位置太近（比如1米范围内）
+                    if veh_info['position'] - existing_pos < 1.0:
+                        self.conn.vehicle.remove(existing_veh)
+                        logger.info(f"INFO: 删除车辆 {existing_veh} 以插入新车辆 {veh_id}")
+                    
                 # 插入车辆
                 self.conn.vehicle.add(
                     vehID=veh_id,
@@ -130,6 +141,7 @@ class TSCEnvironment3D(gym.Env):
                 )
                 # 加入到已经添加的车辆
                 self.inserted_vehicles.add(veh_id)
+                logger.info(f"INFO: Time: {veh_info['depart_time']}, 成功插入障碍物, {veh_id}")
 
         states, rewards, infos, dones, sensor_datas = self.tsc_env.step(action)
         sensor_data = sensor_datas['image'] # 获得图片数据
