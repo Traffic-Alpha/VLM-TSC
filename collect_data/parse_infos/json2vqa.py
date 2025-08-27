@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-08-14 15:38:00
 LastEditors: WANG Maonan
 Description: 将 JSON 转换为 QA
-LastEditTime: 2025-08-19 18:25:08
+LastEditTime: 2025-08-27 17:51:43
 '''
 # Distance thresholds in meters (adjustable)
 CLOSE_RANGE = 30  # Clear visibility zone
@@ -73,13 +73,15 @@ class TrafficLightVQA:
             self._describe_vehicle_behavior_by_traffic_light(), # 当前是否可以通行
             self._generate_existing_special_vehicles(), # 是否包含特殊车辆
             self._generate_existing_accident(), # 是否包含事故
+            self._generate_detailed_existing_accident(), # 详细的事故并解释原因
         ]
     
     def _generate_quantitative(self):
         """生成**定量** QA 对
         """
         return [
-            self._generate_total_lanes(), # 图片的车道数
+            self._generate_total_incoming_lanes(), # 图片的 incoming 车道数
+            self._generate_total_outgoing_lanes(), # outgoing 车道数
             self._generate_total_vehicles_by_distance(), # 图片里面总的车辆数
             self._generate_lane_vehicle_distribution(lane_type='Incoming'), # Incoming 上每个车道的车的数量
             self._generate_lane_vehicle_distribution(lane_type='Outgoing'), # Outgoing 上每个车道的车的数量
@@ -216,11 +218,13 @@ class TrafficLightVQA:
         
         # 查找所有事故/障碍物
         accidents = []
+        accidents_type = []
         for v in self.vehicles.values():
-            if v['vehicle_type'] in ACCIDENT_TYPES:
+            if (v['vehicle_type'] in ACCIDENT_TYPES) and (v['vehicle_type'] not in accidents_type):
                 accident_desc = ACCIDENT_TYPES[v['vehicle_type']] # 事故的描述
                 accidents.append(accident_desc)
-        
+                accidents_type.append(v['vehicle_type'])
+
         # 构建回答
         if accidents:
             if len(accidents) == 1:
@@ -233,18 +237,107 @@ class TrafficLightVQA:
         
         return {'question': question, 'answer': answer}
     
+    def _generate_detailed_existing_accident(self):
+        """是否存在交通事故及详细信息
+        """
+        ACCIDENT_TYPES = {
+            'barrier_A': {
+                'type': 'safety barrier',
+                'reason': 'temporary road closure for maintenance or event',
+                'explanation': 'the area is blocked off for safety reasons'
+            },
+            'barrier_B': {
+                'type': 'safety barrier', 
+                'reason': 'construction work or road repair',
+                'explanation': 'construction zone requires complete closure'
+            },
+            'barrier_C': {
+                'type': 'safety barrier',
+                'reason': 'police checkpoint or security operation',
+                'explanation': 'authorities have restricted access to the area'
+            },
+            'barrier_D': {
+                'type': 'safety barrier',
+                'reason': 'special event or parade route',
+                'explanation': 'road is temporarily closed for public event'
+            },
+            'barrier_E': {
+                'type': 'safety barrier',
+                'reason': 'emergency response operation',
+                'explanation': 'emergency services have sealed off the area'
+            },
+            'tree_branch_1lane': {
+                'type': 'fallen tree branch',
+                'reason': 'severe weather conditions like strong winds or storm',
+                'explanation': 'debris makes the lane unsafe for vehicle passage'
+            },
+            'tree_branch_3lanes': {
+                'type': 'multiple fallen tree branches',
+                'reason': 'extreme weather event causing widespread damage',
+                'explanation': 'extensive debris blocks multiple lanes completely'
+            },
+            'pedestrian': {
+                'type': 'pedestrian incident',
+                'reason': 'pedestrian injury or medical emergency on roadway',
+                'explanation': 'emergency personnel are assisting and the area is unsafe'
+            },
+            'crash_vehicle_1lane': {
+                'type': 'vehicle collision',
+                'reason': 'traffic accident involving one or more vehicles',
+                'explanation': 'damaged vehicles and emergency response block the lane'
+            },
+            'crash_vehicle_3lanes': {
+                'type': 'multi-vehicle collision',
+                'reason': 'major traffic accident involving multiple cars',
+                'explanation': 'wreckage and emergency operations block all affected lanes'
+            }
+        }
+        
+        question = "Is there any traffic accident or obstruction visible in the image, and what is preventing passage?"
+        
+        # 查找所有事故/障碍物
+        accidents = []
+        accidents_type = []
+        for v in self.vehicles.values():
+            if (v['vehicle_type'] in ACCIDENT_TYPES) and (v['vehicle_type'] not in accidents_type):
+                accident_desc = ACCIDENT_TYPES[v['vehicle_type']] # 事故的描述
+                accidents.append(accident_desc)
+                accidents_type.append(v['vehicle_type'])
+        
+        # 构建详细回答
+        if accidents:
+            if len(accidents) == 1:
+                acc = accidents[0]
+                answer = f"Yes, there is a {acc['type']} due to {acc['reason']}. " \
+                        f"The road cannot be passed because {acc['explanation']}."
+            else:
+                answer = "Yes, there are multiple obstructions preventing passage: "
+                details = []
+                for i, acc in enumerate(accidents, 1):
+                    details.append(f"({i}) {acc['type']} caused by {acc['reason']} - {acc['explanation']}")
+                answer += "; ".join(details) + "."
+        else:
+            answer = "No, there are no visible traffic accidents or obstructions blocking the road."
+        
+        return {'question': question, 'answer': answer}
 
     # #############
     # 定量问题生成器
     # #############
-    def _generate_total_lanes(self):
-        """生成总的车道数, 具体到 incoming lanes 和 outgoing lanes
+    def _generate_total_incoming_lanes(self):
+        """生成总的 incoming 车道数
         """
         total = len(self.in_lanes) + len(self.out_lanes)
-        question = "How many lanes are there in total (including incoming and outgoing)?"
-        answer = f"There are a total of {total} lanes, including {len(self.in_lanes)} incoming lanes and {len(self.out_lanes)} outgoing lanes."
+        question = "How many incoming lanes are there in total?"
+        answer = f"There are a total of {len(self.in_lanes)} incoming lanes."
         return {'question': question, 'answer': answer}
-    
+
+    def _generate_total_outgoing_lanes(self):
+        """生成总的 outgoing 车道数
+        """
+        question = "How many outgoing lanes are there in total?"
+        answer = f"There are a total of {len(self.out_lanes)} outgoing lanes."
+        return {'question': question, 'answer': answer}
 
     def _generate_total_vehicles_by_distance(self):
         """Count vehicles by distance ranges and road direction, with consideration for camera visibility
