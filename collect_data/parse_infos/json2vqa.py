@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-08-14 15:38:00
 LastEditors: WANG Maonan
 Description: 将 JSON 转换为 QA
-LastEditTime: 2025-08-27 17:51:43
+LastEditTime: 2025-08-27 17:57:50
 '''
 # Distance thresholds in meters (adjustable)
 CLOSE_RANGE = 30  # Clear visibility zone
@@ -345,13 +345,19 @@ class TrafficLightVQA:
         Returns:
             dict: Contains question and detailed answer about vehicle distribution
         """
+        ACCIDENT_TYPES = [
+            'barrier_A', 'barrier_B', 'barrier_C', 'barrier_D', 'barrier_E',
+            'tree_branch_1lane', 'tree_branch_3lanes',
+            'pedestrian', 'crash_vehicle_1lane', 'crash_vehicle_3lanes',
+        ]
         # Initialize counters for each distance range
         incoming_counts = {'close': 0, 'mid': 0, 'far': 0}
         outgoing_counts = {'close': 0, 'mid': 0, 'far': 0}
 
         for v in self.vehicles.values():
+            v_type = v['vehicle_type']
             dist = v['distance_to_intersection']
-            if dist > self.max_distance:
+            if (dist > self.max_distance) and (v_type in ACCIDENT_TYPES):
                 continue  # Beyond reliable detection range
                 
             if v['road_id'] == self.in_road:
@@ -409,7 +415,12 @@ class TrafficLightVQA:
         
         Returns:
             dict: Contains question and detailed answer about lane distribution
-        """        
+        """
+        ACCIDENT_TYPES = [
+            'barrier_A', 'barrier_B', 'barrier_C', 'barrier_D', 'barrier_E',
+            'tree_branch_1lane', 'tree_branch_3lanes',
+            'pedestrian', 'crash_vehicle_1lane', 'crash_vehicle_3lanes',
+        ]   
         # Select target lanes
         lanes = self.in_lanes if lane_type == 'Incoming' else self.out_lanes
         # Initialize lane statistics
@@ -425,10 +436,13 @@ class TrafficLightVQA:
 
         # Count vehicles per distance tier
         for v in self.vehicles.values():
+            v_type = v['vehicle_type']
             dist = v['distance_to_intersection'] # 车辆的距离
             lane_id = v['lane_id']
             # 排除不在对应车道和观测不到的车辆
             if dist > self.max_distance or lane_id not in lanes:
+                continue
+            if v_type in ACCIDENT_TYPES:
                 continue
             
             # Extract lane number from lane_id (format: "road_laneNum")
