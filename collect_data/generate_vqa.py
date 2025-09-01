@@ -10,7 +10,7 @@ Description: 根据 JSON 文件产生描述图片的 QA
 -> 进口道每个车道有多少车
 -> 出口道每个车道有多少车
 LastEditors: WANG Maonan
-LastEditTime: 2025-08-19 17:44:04
+LastEditTime: 2025-08-27 17:58:43
 '''
 import os
 import json
@@ -67,13 +67,14 @@ def generate_and_save_vqa(root_dir, distance_mapping):
 
 if __name__ == "__main__":
     # 配置参数
-    DATA_ROOT = path_convert("../exp_dataset/France_Massy_easy_random_perturbation_crashed")  # 包含timestep目录的根目录
+    DATA_ROOT = path_convert("../exp_dataset/SouthKorea_Songdo_easy_fluctuating_commuter_barrier")  # 包含timestep目录的根目录
     
     # 定义不同JSON文件对应的max_distance (使用数字键)
     DISTANCE_MAPPING = {
         0: 100, 
-        1: 70, 
-        2: 80
+        1: 100, 
+        2: 100,
+        3: 100,
     } # 每个方向的观测距离
     
     # 生成并保存结果

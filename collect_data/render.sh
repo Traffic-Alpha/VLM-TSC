@@ -4,16 +4,16 @@
  # @LastEditors: WANG Maonan
  # @Description: Render Scenarios
  # @Example 渲染单个时间步 ./render.sh --start 250 --end 251 --models high_poly
- # @LastEditTime: 2025-08-11 17:37:59
+ # @LastEditTime: 2025-08-29 17:54:09
 ### 
 #!/bin/bash
 
 # 默认参数值
-DEFAULT_START=0
-DEFAULT_END=100
+DEFAULT_START=0 # 初始没有车辆
+DEFAULT_END=600
 DEFAULT_MODELS="high_poly"
-DEFAULT_BLEND="/home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/exp_networks/Hongkong_YMT/env.blend"
-DEFAULT_SCENARIO="/home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/exp_dataset/Hongkong_YMT_easy_high_density_barrier/"
+DEFAULT_BLEND="/home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/exp_networks/SouthKorea_Songdo/env_buildings.blend"
+DEFAULT_SCENARIO="/home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/exp_dataset/France_Massy_easy_random_perturbation_crashed/"
 DEFAULT_TSHUB="/home/tshub/Code_Project/2_Traffic/TransSimHub/"
 
 # 解析命令行参数
