@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-08-14 15:38:00
 LastEditors: WANG Maonan
 Description: 将 JSON 转换为 QA
-LastEditTime: 2025-08-27 17:57:50
+LastEditTime: 2025-09-08 21:00:13
 '''
 # Distance thresholds in meters (adjustable)
 CLOSE_RANGE = 30  # Clear visibility zone
@@ -165,7 +165,7 @@ class TrafficLightVQA:
                     closest_vehicle = v
         
         # 如果找到特殊车辆，构建详细回答
-        if closest_vehicle and closest_distance<self.max_distance:
+        if closest_vehicle and closest_distance < self.max_distance:
             vehicle_type = closest_vehicle['vehicle_type']
             distance = closest_vehicle['distance_to_intersection']
             veh_road = closest_vehicle['road_id']
@@ -177,24 +177,40 @@ class TrafficLightVQA:
             }
             friendly_type = type_mapping.get(vehicle_type, vehicle_type)
 
-            # Determine movement status first
+            # 确定运动状态
             if veh_road == self.in_road:
                 movement = "entering"
-                position_desc = f"approaching the junction (about {distance:.1f}m away)"
+                direction = "approaching"
             else:
                 movement = "exiting"
-                position_desc = f"moving away from the junction (about {distance:.1f}m from the intersection)"
+                direction = "leaving"
 
-            # Adjust distance description based on movement
-            if distance < 50:
-                if movement == "entering":
-                    dist_desc = f"nearing the junction (about {distance:.1f}m away)"
-                else:
-                    dist_desc = f"just left the junction (about {distance:.1f}m away)"
+            # 根据距离提供详细的描述
+            if distance < 15:
+                visibility_desc = "very clearly visible"
+                position_desc = f"very close to the intersection (only {distance:.1f}m away)"
+            elif distance < 25:
+                visibility_desc = "clearly visible"
+                position_desc = f"near the intersection ({distance:.1f}m away)"
+            elif distance < 35:
+                visibility_desc = "fairly clear"
+                position_desc = f"approaching the intersection ({distance:.1f}m away)"
+            elif distance < 50:
+                visibility_desc = "somewhat visible"
+                position_desc = f"in the distance ({distance:.1f}m from the intersection)"
             else:
-                dist_desc = position_desc
+                visibility_desc = "barely visible"
+                position_desc = f"far in the distance ({distance:.1f}m away)"
 
-            answer = f"Yes, there is a {friendly_type} {dist_desc}. The vehicle is {movement} the intersection."
+            # 根据运动方向调整描述
+            if movement == "entering":
+                action_desc = f"{direction} the junction"
+            else:
+                action_desc = f"{direction} the junction area"
+
+            answer = f"Yes, there is a {friendly_type} {position_desc}. " \
+                    f"The {friendly_type} is {visibility_desc} and is {action_desc}. " \
+                    f"It appears to be {movement} the intersection."
 
         return {'question': question, 'answer': answer}
     
@@ -357,6 +373,9 @@ class TrafficLightVQA:
         for v in self.vehicles.values():
             v_type = v['vehicle_type']
             dist = v['distance_to_intersection']
+            if dist > self.max_distance:
+                continue
+            
             if (dist > self.max_distance) and (v_type in ACCIDENT_TYPES):
                 continue  # Beyond reliable detection range
                 
