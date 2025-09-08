@@ -6,7 +6,7 @@
 + Action Design: Choose Next Phase 
 + Reward Design: Average Queue Length
 + Command Example: MAP=France_Massy SCENE=easy_random_perturbation_none python train_rl_model.py
-LastEditTime: 2025-08-12 11:27:06
+LastEditTime: 2025-09-08 17:12:56
 '''
 import os
 import torch
@@ -18,7 +18,7 @@ from tshub.utils.init_log import set_logger
 
 from utils.env_utils.make_tsc_env import make_env
 from utils.training_utils.simple_int import IntersectionNet
-from utils.training_utils.sb3_utils import VecNormalizeCallback, linear_schedule
+from utils.training_utils.sb3_utils import VecNormalizeCallback, linear_schedule, CustomEvalCallback
 
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
@@ -41,7 +41,7 @@ def main(cfg: DictConfig):
     # base
     SCENARIO_NAME = cfg.SCENARIO_NAME
     JUNCTION_NAME = cfg.JUNCTION_NAME
-    NUM_SECONDS = cfg.NUM_SECONDS # 仿真时间
+    NUM_SECONDS = cfg.TRAINING_NUM_SECONDS # 仿真时间
     PHASE_NUMBER = cfg.PHASE_NUMBER # 绿灯相位数量
     MOVEMENT_NUMBER = cfg.MOVEMENT_NUMBER # 有效 movement 的数量
     # networks & sumocfg
@@ -73,6 +73,10 @@ def main(cfg: DictConfig):
     env = SubprocVecEnv([make_env(env_index=f'{i}', **params) for i in range(12)])
     env = VecNormalize(env, norm_obs=False, norm_reward=True)
 
+    eval_env = SubprocVecEnv([make_env(env_index=f'{i}', **params) for i in range(1)])
+    eval_env = VecNormalize(eval_env, norm_obs=False, norm_reward=True)
+
+
     # #########
     # Callback
     # #########
@@ -84,7 +88,14 @@ def main(cfg: DictConfig):
         save_freq=10000,
         save_path=model_path,
     ) # 保存环境参数
-    callback_list = CallbackList([checkpoint_callback, vec_normalize_callback])
+    eval_callback = CustomEvalCallback(
+        eval_env, 
+        best_model_save_path=model_path,
+        env_save_path=model_path,
+        log_path=log_path, eval_freq=1_000,
+        deterministic=True, render=False
+    ) # 保存最优的模型和对应的环境
+    callback_list = CallbackList([checkpoint_callback, vec_normalize_callback, eval_callback])
 
     # #########
     # Training
@@ -105,7 +116,7 @@ def main(cfg: DictConfig):
                 tensorboard_log=tensorboard_path, 
                 device=device
             )
-    model.learn(total_timesteps=3e5, tb_log_name=f"{SCENARIO_IDX}", callback=callback_list)
+    model.learn(total_timesteps=1e6, tb_log_name=f"{SCENARIO_IDX}", callback=callback_list)
     
     # #################
     # 保存 model 和 env

@@ -3,8 +3,8 @@
 @Date: 2023-09-08 15:49:30
 @Description: 处理 TSCHub ENV 中的 state, reward
 + state: 5 个时刻的每一个 movement 的 queue length
-+ reward: Queue Length
-LastEditTime: 2025-08-11 18:05:52
++ reward: Waiting Time
+LastEditTime: 2025-09-08 16:25:12
 '''
 import numpy as np
 import gymnasium as gym
@@ -27,6 +27,7 @@ class TSCEnvWrapper(gym.Wrapper):
         self.tls_id = tls_id
         self.movement_ids = None
         self.phase2movements = None
+        self.in_roads = None # 进入路口的车道
 
         # state 缓冲区
         self.max_states_length = max_states_length # state 的时间长度
@@ -85,11 +86,12 @@ class TSCEnvWrapper(gym.Wrapper):
         if num_vehicles == 0:
             return 0.0  # 中性奖励，鼓励保持畅通状态
         
-        # 计算总等待时间
+        # 计算总等待时间 (这里需要排除车辆离开路口之后, 进入出口车道, 此时累积等待时间就不要计算了)
         total_waiting_time = 0
         for _, veh_info in vehicle_data.items():
-            total_waiting_time += veh_info['accumulated_waiting_time']
-        
+            if veh_info['road_id'] in self.in_roads: # 只统计进口道的车辆
+                total_waiting_time += veh_info['accumulated_waiting_time']
+
         # 计算平均等待时间并返回负值（最小化等待）
         average_waiting_time = total_waiting_time / num_vehicles
         return -average_waiting_time
@@ -117,6 +119,7 @@ class TSCEnvWrapper(gym.Wrapper):
         # 初始化路口静态信息
         self.movement_ids = state['tls'][self.tls_id]['movement_ids']
         self.phase2movements = state['tls'][self.tls_id]['phase2movements']
+        self.in_roads = state['tls'][self.tls_id]['in_roads']
 
         # 处理路口动态信息
         _, _ = self.state_wrapper(state=state)
