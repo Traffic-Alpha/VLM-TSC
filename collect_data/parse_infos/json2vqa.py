@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-08-14 15:38:00
 LastEditors: WANG Maonan
 Description: 将 JSON 转换为 QA
-LastEditTime: 2025-09-08 21:00:13
+LastEditTime: 2025-09-11 16:44:26
 '''
 # Distance thresholds in meters (adjustable)
 CLOSE_RANGE = 30  # Clear visibility zone
@@ -144,7 +144,8 @@ class TrafficLightVQA:
     def _generate_existing_special_vehicles(self):
         """生成关于特殊车辆存在与否的问题和答案
         1. 检查图像中是否存在特殊车辆(警车、消防车、救护车等)
-        2. 并根据车辆距离路口的位置提供详细信息
+        2. 检查是否在 incoming lane
+        3. 并根据车辆距离路口的位置提供详细信息
         
         Returns:
             dict: 包含生成的问题和答案的字典
@@ -158,7 +159,7 @@ class TrafficLightVQA:
         
         # 遍历所有车辆寻找特殊车辆
         for v in self.vehicles.values():
-            if v['vehicle_type'].lower() in ['police', 'emergency', 'fire_engine']:
+            if v['vehicle_type'].lower() in ['police', 'emergency', 'fire_engine'] and v['lane_id'] in self.in_lanes:
                 # 更新最近的特殊车辆信息
                 if v['distance_to_intersection'] < closest_distance:
                     closest_distance = v['distance_to_intersection']
