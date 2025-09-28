@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-06-25 18:21:04
 LastEditors: WANG Maonan
 Description: Render Junction Scenarios
-LastEditTime: 2025-08-11 17:31:49
+LastEditTime: 2025-09-28 16:41:06
 '''
 import os
 import sys
@@ -21,6 +21,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--tshub", type=str, required=True, help="TransSimHub 根目录") # 加载 tshub 3d render lib
     parser.add_argument("--scenario", type=str, required=True, help="场景数据路径")
+    parser.add_argument("--resolution", type=int, default=480, help="图像分辨率")
     parser.add_argument("--start", type=int, default=266, help="起始时间步")
     parser.add_argument("--end", type=int, default=266, help="结束时间步")
     parser.add_argument("--models", type=str, default="high_poly", choices=["high_poly", "low_poly"], help="车辆模型精度")
@@ -46,7 +47,7 @@ def main():
         # 初始化管理器
         vehicle_mgr = VehicleManager(models_base_path) # 加载特定的车辆模型
         renderer = TimestepRenderer(
-            resolution=480,
+            resolution=args.resolution,
             render_mask=False, 
             render_depth=False
         ) # 渲染场景的每一个时刻

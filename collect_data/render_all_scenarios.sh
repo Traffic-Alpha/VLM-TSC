@@ -3,16 +3,15 @@
  # @Date: 2025-08-14 16:59:25
  # @LastEditors: WANG Maonan
  # @Description: 渲染多个场景
- # @LastEditTime: 2025-08-29 18:16:46
+ # @LastEditTime: 2025-09-09 20:03:15
 ### 
 #!/bin/bash
 
 # 定义场景路径数组
 SCENARIOS=(
-    "/home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/exp_dataset/SouthKorea_Songdo_easy_random_perturbation_barrier"
-    "/home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/exp_dataset/SouthKorea_Songdo_easy_random_perturbation_branch"
-    "/home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/exp_dataset/SouthKorea_Songdo_easy_random_perturbation_crashed"
-    "/home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/exp_dataset/SouthKorea_Songdo_easy_random_perturbation_pedestrain"
+    "/home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/exp_dataset/France_Massy_easy_fluctuating_commuter_pedestrain"
+    "/home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/exp_dataset/France_Massy_easy_increasing_demand_pedestrain"
+    "/home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/exp_dataset/France_Massy_easy_random_perturbation_pedestrain"
 )
 
 # 遍历所有场景并执行render.sh

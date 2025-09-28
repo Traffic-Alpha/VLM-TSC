@@ -4,15 +4,16 @@
  # @LastEditors: WANG Maonan
  # @Description: Render Scenarios
  # @Example 渲染单个时间步 ./render.sh --start 250 --end 251 --models high_poly
- # @LastEditTime: 2025-08-29 17:54:09
+ # @LastEditTime: 2025-09-28 16:49:00
 ### 
 #!/bin/bash
 
 # 默认参数值
 DEFAULT_START=0 # 初始没有车辆
 DEFAULT_END=600
+DEFAULT_RESOLUTION=480
 DEFAULT_MODELS="high_poly"
-DEFAULT_BLEND="/home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/exp_networks/SouthKorea_Songdo/env_buildings.blend"
+DEFAULT_BLEND="/home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/exp_networks/France_Massy/env_buildings.blend"
 DEFAULT_SCENARIO="/home/tshub/Code_Project/2_Traffic/TrafficAlpha/VLM-TSC/exp_dataset/France_Massy_easy_random_perturbation_crashed/"
 DEFAULT_TSHUB="/home/tshub/Code_Project/2_Traffic/TransSimHub/"
 
@@ -25,6 +26,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --end)
             END="$2"
+            shift 2
+            ;;
+        --resolution)
+            RESOLUTION="$2"
             shift 2
             ;;
         --models)
@@ -53,6 +58,7 @@ done
 # 设置默认值（如果用户未提供）
 START=${START:-$DEFAULT_START}
 END=${END:-$DEFAULT_END}
+RESOLUTION=${RESOLUTION:-$DEFAULT_RESOLUTION}
 MODELS=${MODELS:-$DEFAULT_MODELS}
 BLEND_FILE=${BLEND_FILE:-$DEFAULT_BLEND}
 SCENARIO_PATH=${SCENARIO_PATH:-$DEFAULT_SCENARIO}
@@ -64,6 +70,7 @@ echo "│           Blender 渲染配置参数                 │"
 echo "├──────────────────────────────────────────────┤"
 echo "│ 起始时间步: $START"
 echo "│ 结束时间步: $END"
+echo "│ 输出图像分辨率: $RESOLUTION"
 echo "│ 模型精度:   $MODELS"
 echo "│ Blend文件:  $BLEND_FILE"
 echo "│ 场景路径:   $SCENARIO_PATH"
@@ -76,6 +83,7 @@ blender "$BLEND_FILE" --background --python render_scene.py -- \
     --scenario "$SCENARIO_PATH" \
     --start "$START" \
     --end "$END" \
+    --resolution "$RESOLUTION" \
     --models "$MODELS"
 
 # 检查退出状态
