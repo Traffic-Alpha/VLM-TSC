@@ -10,7 +10,7 @@ Description: 根据 JSON 文件产生描述图片的 QA
 -> 进口道每个车道有多少车
 -> 出口道每个车道有多少车
 LastEditors: WANG Maonan
-LastEditTime: 2025-08-27 17:58:43
+LastEditTime: 2025-09-11 16:38:37
 '''
 import os
 import json
@@ -66,16 +66,34 @@ def generate_and_save_vqa(root_dir, distance_mapping):
             print(f"Generated: {os.path.join(timestep, 'qa', json_file)}")
 
 if __name__ == "__main__":
-    # 配置参数
-    DATA_ROOT = path_convert("../exp_dataset/SouthKorea_Songdo_easy_fluctuating_commuter_barrier")  # 包含timestep目录的根目录
-    
-    # 定义不同JSON文件对应的max_distance (使用数字键)
-    DISTANCE_MAPPING = {
-        0: 100, 
-        1: 100, 
-        2: 100,
-        3: 100,
-    } # 每个方向的观测距离
-    
-    # 生成并保存结果
-    results = generate_and_save_vqa(DATA_ROOT, DISTANCE_MAPPING)
+    for i in [
+        "SouthKorea_Songdo_easy_fluctuating_commuter_barrier",
+        "SouthKorea_Songdo_easy_fluctuating_commuter_branch",
+        "SouthKorea_Songdo_easy_fluctuating_commuter_crashed",
+        "SouthKorea_Songdo_easy_fluctuating_commuter_none",
+        "SouthKorea_Songdo_easy_fluctuating_commuter_pedestrain",
+        
+        "SouthKorea_Songdo_easy_increasing_demand_barrier",
+        "SouthKorea_Songdo_easy_increasing_demand_branch",
+        "SouthKorea_Songdo_easy_increasing_demand_crashed",
+        "SouthKorea_Songdo_easy_increasing_demand_none",
+        "SouthKorea_Songdo_easy_increasing_demand_pedestrain",
+
+        "SouthKorea_Songdo_easy_random_perturbation_barrier",
+        "SouthKorea_Songdo_easy_random_perturbation_branch",
+        "SouthKorea_Songdo_easy_random_perturbation_crashed",
+        "SouthKorea_Songdo_easy_random_perturbation_none",
+        "SouthKorea_Songdo_easy_random_perturbation_pedestrain",
+    ]:
+        DATA_ROOT = path_convert(f"../exp_dataset/{i}")  # 包含timestep目录的根目录
+        
+        # 定义不同JSON文件对应的max_distance (使用数字键)
+        DISTANCE_MAPPING = {
+            0: 90, 
+            1: 90, 
+            2: 90,
+            3: 90,
+        } # 每个方向的观测距离
+        
+        # 生成并保存结果
+        results = generate_and_save_vqa(DATA_ROOT, DISTANCE_MAPPING)

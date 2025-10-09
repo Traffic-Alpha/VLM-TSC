@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-06-25 16:45:03
 LastEditors: WANG Maonan
 Description: 使用固定配时收集信息
-LastEditTime: 2025-08-07 18:33:09
+LastEditTime: 2025-09-28 18:25:23
 '''
 import os
 import hydra
@@ -65,8 +65,9 @@ def main(cfg: DictConfig):
     # 输出文件夹
     base_path = base_path = path_convert(f"../exp_dataset/{SCENARIO_IDX}/") # 存储路径
     trip_info = path_convert(f"../exp_dataset/{SCENARIO_IDX}/tripinfo_random.out.xml")
-    
+
     # Init Env
+    print(JUNCTION_NAME)
     tsc_env = make_env(
         tls_id=JUNCTION_NAME,
         sumo_cfg=sumo_cfg,
@@ -90,7 +91,7 @@ def main(cfg: DictConfig):
     dones = False
     rl_state, infos = tsc_env.reset()
     index = 0
-    REPEAT_NUMBER = 4 # 每个 traffic phase 重复的次数
+    REPEAT_NUMBER = 5 # 每个 traffic phase 重复的次数
 
     while not dones:
         action = (index // REPEAT_NUMBER) % PHASE_NUMBER
