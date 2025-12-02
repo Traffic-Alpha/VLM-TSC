@@ -3,7 +3,7 @@ Author: WANG Maonan
 Date: 2025-06-30 15:37:30
 LastEditors: WANG Maonan
 Description: 将渲染的结果存储为 gif 文件
-LastEditTime: 2025-08-12 11:34:56
+LastEditTime: 2025-11-06 18:21:47
 '''
 import os
 import imageio
@@ -144,12 +144,12 @@ def create_gif_from_subdirs(
     return output_path
 
 # Example usage:
-for _image_name in ['0', '1', '2', 'bev']:
+for _image_name in ['0', '1', '2', '3', 'bev']:
     create_gif_from_subdirs(
-        root_dir=path_convert("./exp_dataset/France_Massy_easy_fluctuating_commuter_none/"),
+        root_dir=path_convert("./exp_dataset/SouthKorea_Songdo_easy_fluctuating_commuter_none/"),
         subfolder="high_quality_rgb",
         image_name=_image_name,
-        start_num=20,
-        end_num=600,
+        start_num=300,
+        end_num=500,
         add_timestamp=True
     )
