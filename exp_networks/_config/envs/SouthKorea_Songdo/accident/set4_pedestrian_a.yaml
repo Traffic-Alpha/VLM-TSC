@@ -1,0 +1,30 @@
+# @package _global_
+ACCIDENTS:
+  - id: accident_01
+    depart_time: 100
+    edge_id: "315156946#0"
+    lane_index: 1
+    position: 272
+    type: "other_accidents"
+    duration: 40
+  - id: accident_02
+    depart_time: 100
+    edge_id: "315156946#0"
+    lane_index: 2
+    position: 272
+    type: "other_accidents"
+    duration: 40
+  - id: accident_03
+    depart_time: 100
+    edge_id: "315156946#0"
+    lane_index: 3
+    position: 272
+    type: "pedestrian"
+    duration: 40
+  - id: accident_04
+    depart_time: 100
+    edge_id: "315156946#0"
+    lane_index: 4
+    position: 272
+    type: "other_accidents"
+    duration: 40

@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - /envs/Hongkong_YMT/base
+  - /envs/Hongkong_YMT/accident/none
+  - /envs/Hongkong_YMT/special_vehicle/none
+  - /network_routes/easy_random_perturbation

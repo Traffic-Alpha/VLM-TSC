@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - /envs/Tianjin_zhijingdao/base
+  - /envs/Tianjin_zhijingdao/accident/none
+  - /envs/Tianjin_zhijingdao/special_vehicle/none
+  - /network_routes/easy_fluctuating_commuter

@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - /envs/SouthKorea_Songdo/base
+  - /envs/SouthKorea_Songdo/accident/set1_barrier_b
+  - /envs/SouthKorea_Songdo/special_vehicle/set1
+  - /network_routes/easy_random_perturbation

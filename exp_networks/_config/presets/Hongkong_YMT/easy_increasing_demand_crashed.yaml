@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - /envs/Hongkong_YMT/base
+  - /envs/Hongkong_YMT/accident/set3_crashed
+  - /envs/Hongkong_YMT/special_vehicle/set3
+  - /network_routes/easy_increasing_demand

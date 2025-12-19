@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - /envs/France_Massy/base
+  - /envs/France_Massy/accident/set2_tree_branch
+  - /envs/France_Massy/special_vehicle/set1
+  - /network_routes/easy_increasing_demand

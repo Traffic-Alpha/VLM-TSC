@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - /envs/SouthKorea_Songdo_3INTS/base
+  - /envs/SouthKorea_Songdo_3INTS/accident/none
+  - /envs/SouthKorea_Songdo_3INTS/special_vehicle/none
+  - /network_routes/normal_high_density

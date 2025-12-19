@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - /envs/France_Massy/base
+  - /envs/France_Massy/accident/none
+  - /envs/France_Massy/special_vehicle/none
+  - /network_routes/easy_increasing_demand

@@ -1,0 +1,23 @@
+# @package _global_
+ACCIDENTS:
+  - id: accident_01
+    "depart_time": 150
+    "edge_id": "30658263#0"
+    "lane_index": 0
+    "position": 98.5
+    type: "other_accidents"
+    "duration": 50
+  - id: accident_02
+    "depart_time": 150
+    "edge_id": "30658263#0"
+    "lane_index": 1
+    "position": 98.5
+    type: "pedestrian"
+    "duration": 50
+  - id: accident_03
+    "depart_time": 150
+    "edge_id": "30658263#0"
+    "lane_index": 2
+    "position": 98.5
+    type: "barrier_A"
+    "duration": 50

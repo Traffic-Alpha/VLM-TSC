@@ -1,0 +1,44 @@
+# @package _global_
+ACCIDENTS:
+  - id: accident_01
+    "depart_time": 100
+    "edge_id": "-172801188#1.174"
+    "lane_index": 0
+    "position": 96.5
+    type: "other_accidents"
+    "duration": 60
+  - id: accident_02
+    "depart_time": 100
+    "edge_id": "-172801188#1.174"
+    "lane_index": 1
+    "position": 96.5
+    type: "pedestrian"
+    "duration": 60
+  - id: accident_03
+    "depart_time": 200
+    "edge_id": "172801130.183"
+    "lane_index": 0
+    "position": 59.0
+    type: "other_accidents"
+    "duration": 60
+  - id: accident_04
+    "depart_time": 200
+    "edge_id": "172801130.183"
+    "lane_index": 1
+    "position": 59.0
+    type: "pedestrian"
+    "duration": 60
+  - id: accident_05
+    "depart_time": 400
+    "edge_id": "-172801188#1.174"
+    "lane_index": 0
+    "position": 96.5
+    type: "other_accidents"
+    "duration": 40
+  - id: accident_06
+    "depart_time": 400
+    "edge_id": "-172801188#1.174"
+    "lane_index": 1
+    "position": 96.5
+    type: "pedestrian"
+    "duration": 40

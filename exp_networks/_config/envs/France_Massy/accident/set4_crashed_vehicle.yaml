@@ -1,0 +1,16 @@
+# @package _global_
+ACCIDENTS:
+  - id: accident_01
+    "depart_time": 100
+    "edge_id": "-172801188#1.174"
+    "lane_index": 0
+    "position": 96.5
+    type: "crash_vehicle_1lane"
+    "duration": 80
+  - id: accident_02
+    "depart_time": 100
+    "edge_id": "-172801188#1.174"
+    "lane_index": 1
+    "position": 96.5
+    type: "other_accidents"
+    "duration": 80

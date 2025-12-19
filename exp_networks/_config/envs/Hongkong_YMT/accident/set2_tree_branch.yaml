@@ -1,0 +1,23 @@
+# @package _global_
+ACCIDENTS:
+  - id: accident_01
+    "depart_time": 200
+    "edge_id": "102454134#0"
+    "lane_index": 0
+    "position": 45.5
+    type: "other_accidents"
+    "duration": 60
+  - id: accident_02
+    "depart_time": 200
+    "edge_id": "102454134#0"
+    "lane_index": 1
+    "position": 45.5
+    type: "tree_branch_3lanes" # 同时刻发生事故, 挡住多个 lane, 需要有 other 填充
+    "duration": 60
+  - id: accident_03
+    "depart_time": 200
+    "edge_id": "102454134#0"
+    "lane_index": 2
+    "position": 45.5
+    type: "other_accidents"
+    "duration": 60

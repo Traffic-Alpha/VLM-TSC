@@ -1,0 +1,13 @@
+# @package _global_
+SCENARIO_NAME: "Hongkong_YMT"
+JUNCTION_NAME: "J1"
+NUM_SECONDS: 600 # 收集数据的时间
+TRAINING_NUM_SECONDS: 750 # 训练 RL 需要的时间
+PHASE_NUMBER: 4 # TODO, 这里需要区分 normal 和 easy
+PHASE_NUMBER_NORMAL: 3 # 使用 normal network 对应的 phase 数量
+MOVEMENT_NUMBER: 6
+CENTER_COORDINATES: [172, 201, 60]
+SENSOR_INDEX_2_PHASE_INDEX: # 传感器图片 id 和 phase id 对应关系
+  0: 2
+  1: 1
+  2: 0

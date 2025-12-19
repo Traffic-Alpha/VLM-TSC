@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - /envs/Hongkong_YMT/base
+  - /envs/Hongkong_YMT/accident/set2_tree_branch
+  - /envs/Hongkong_YMT/special_vehicle/set2
+  - /network_routes/easy_increasing_demand

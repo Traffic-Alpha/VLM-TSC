@@ -1,0 +1,11 @@
+# @package _global_
+SCENARIO_NAME: "France_Massy"
+JUNCTION_NAME: "INT1"
+NUM_SECONDS: 600
+PHASE_NUMBER: 3
+MOVEMENT_NUMBER: 6
+CENTER_COORDINATES: [173, 244, 60]
+SENSOR_INDEX_2_PHASE_INDEX: # 传感器图片 id 和 phase id 对应关系
+  0: 2
+  1: 1
+  2: 0

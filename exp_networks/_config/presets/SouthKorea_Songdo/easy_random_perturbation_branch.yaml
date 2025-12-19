@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - /envs/SouthKorea_Songdo/base
+  - /envs/SouthKorea_Songdo/accident/set2_branch_a
+  - /envs/SouthKorea_Songdo/special_vehicle/set2
+  - /network_routes/easy_random_perturbation

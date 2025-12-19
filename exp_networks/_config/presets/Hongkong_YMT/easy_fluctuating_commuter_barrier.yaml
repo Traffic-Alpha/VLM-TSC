@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - /envs/Hongkong_YMT/base
+  - /envs/Hongkong_YMT/accident/set1_barrier_a
+  - /envs/Hongkong_YMT/special_vehicle/set1
+  - /network_routes/easy_fluctuating_commuter

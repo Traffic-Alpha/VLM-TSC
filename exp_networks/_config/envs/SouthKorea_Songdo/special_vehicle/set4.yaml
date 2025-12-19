@@ -1,0 +1,38 @@
+# @package _global_
+SPECIAL_VEHICLES:
+  - id: fire_engine_01
+    type: fire_engine
+    depart_time: 100
+    route: ["525074961#6","525074961#10"]
+  - id: fire_engine_02
+    type: fire_engine
+    depart_time: 101
+    route: ["525074961#6","525074961#10"]
+  - id: ambulance_00
+    type: emergency
+    depart_time: 206
+    route: ["E1","989312046#2"]
+  - id: ambulance_01
+    type: emergency
+    depart_time: 300
+    route: ["E1","989312046#2"]
+  - id: ambulance_02
+    type: emergency
+    depart_time: 350
+    route: ["E1","429770748#1"]
+  - id: fire_engine_03
+    type: fire_engine
+    depart_time: 400
+    route: ["989312046#0","989312046#2"]
+  - id: fire_engine_04
+    type: fire_engine
+    depart_time: 401
+    route: ["989312046#0","989312046#2"]
+  - id: fire_engine_05
+    type: fire_engine
+    depart_time: 402
+    route: ["989312046#0","989312046#2"]
+  - id: ambulance_03
+    type: emergency
+    depart_time: 500
+    route: ["525074961#6","429770748#1"]

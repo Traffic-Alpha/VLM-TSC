@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - /envs/India_Delhi/base
+  - /envs/India_Delhi/accident/none
+  - /envs/India_Delhi/special_vehicle/none
+  - /network_routes/easy_high_density

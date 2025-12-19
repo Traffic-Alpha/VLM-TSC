@@ -1,0 +1,22 @@
+# @package _global_
+SPECIAL_VEHICLES:
+  - id: police_01
+    type: police
+    depart_time: 150
+    route: ["102454134#0", "102640432#0"]
+  - id: ambulance_01
+    type: emergency
+    depart_time: 200
+    route: ["30658263#0", "102640453#0"]
+  - id: "fire_engine_03"
+    type: "fire_engine"
+    depart_time: 305
+    route: ["1200878753#0", "102640412#0"]
+  - id: ambulance_02
+    type: emergency
+    depart_time: 400
+    route: ["960661806#0", "102640426#0"]
+  - id: ambulance_03
+    type: emergency
+    depart_time: 470
+    route: ["102454134#0", "102640432#0"]

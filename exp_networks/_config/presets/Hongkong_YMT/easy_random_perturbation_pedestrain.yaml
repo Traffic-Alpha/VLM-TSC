@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - /envs/Hongkong_YMT/base
+  - /envs/Hongkong_YMT/accident/set4_pedestrian
+  - /envs/Hongkong_YMT/special_vehicle/set4
+  - /network_routes/easy_random_perturbation
