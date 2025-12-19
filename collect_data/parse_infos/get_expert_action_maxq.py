@@ -7,7 +7,7 @@ Description: 根据 Infos 来计算专家动作, 具体的步骤为:
 2. 检测 in lane 是否存在 emergency, police, fire_engine 且距离路口距离小于 20m，则将其修改为绿灯
 3. 检测 in lane 存在 safety_barriers, 则将这个 traffic phase 进行 mask, 在剩下的相位进行选择
 4. 如果是常规情况, 根据相位内车辆的数量进行决策
-LastEditTime: 2025-12-19 14:21:57
+LastEditTime: 2025-12-19 14:36:03
 '''
 class ExpertTrafficSignalController:
     def __init__(self, tls_id: str, raw_infos):
@@ -44,8 +44,13 @@ class ExpertTrafficSignalController:
                     lanes.update(self.movement_lane_ids[movement])
             self.phase_lanes[phase] = lanes
     
-    def decide(self, vehicle_info):
+    def decide(self, vehicle_info, current_phase=None, phase_duration=0):
         """根据当前车辆信息做出决策
+        
+        Args:
+            vehicle_info: 车辆信息字典
+            current_phase: 当前相位编号
+            phase_duration: 当前相位已持续时间（秒）
         """
         # 将车辆信息转换为按车道分组的格式
         lane_vehicles = self._group_vehicles_by_lane(vehicle_info)
@@ -61,7 +66,7 @@ class ExpertTrafficSignalController:
             return obstacle_phase
         
         # 3. 没有特殊情况，计算每个相位的车辆数，返回车辆数最多的相位
-        return self._select_phase_normal(lane_vehicles)
+        return self._select_phase_normal(lane_vehicles, current_phase, phase_duration)
     
     def _group_vehicles_by_lane(self, vehicle_info):
         """将车辆信息按车道分组
@@ -75,6 +80,7 @@ class ExpertTrafficSignalController:
                 vehicle_type = vehicle_data['vehicle_type']
                 speed = vehicle_data['speed'] # 车辆速度
                 waiting_time = vehicle_data['waiting_time'] # 车辆等待事件
+                accumulated_waiting_time = vehicle_data['accumulated_waiting_time'] # 累积等待时间
                 position = lane_length - vehicle_data['lane_position'] # 车道长度 - 所在位置
                 
                 if lane_id not in lane_vehicles:
@@ -85,6 +91,7 @@ class ExpertTrafficSignalController:
                     'position': position,
                     'speed': speed,
                     'waiting_time': waiting_time,
+                    'accumulated_waiting_time': accumulated_waiting_time,
                 })
         
         return lane_vehicles
@@ -168,15 +175,19 @@ class ExpertTrafficSignalController:
         # 选择排队车辆最多的相位
         return max(phase_queues, key=phase_queues.get)
     
-    def _select_phase_normal(self, lane_vehicles):
+    def _select_phase_normal(self, lane_vehicles, current_phase=None, phase_duration=0):
         """根据每个相位的车辆数选择相位
         
         Args:
             lane_vehicles: 按车道分组的车辆信息
+            current_phase: 当前相位编号
+            phase_duration: 当前相位已持续时间（秒）
             
         Returns:
             车辆数最多的相位
         """
+        MAX_GREEN_TIME = 20  # 最大绿灯时间阈值（秒），可根据实际调整
+        
         # 计算每个相位的车辆数
         phase_vehicle_count = {phase: 0 for phase in self.phase2movements.keys()}
         
@@ -186,12 +197,18 @@ class ExpertTrafficSignalController:
                 if lane_id in lane_vehicles:
                     for vehicle in lane_vehicles[lane_id]:
                         # 只统计正常车辆且正在排队的车辆数
-                        if vehicle['speed']<0.1 and vehicle['type'] not in [
+                        if vehicle['accumulated_waiting_time']>2 and vehicle['type'] not in [
                             'barrier_A', 'barrier_B', 'barrier_C', 'barrier_D', 'barrier_E',
                             'tree_branch_1lane', 'tree_branch_3lanes', 'pedestrian',
                             'crash_vehicle_1lane', 'crash_vehicle_3lanes', 'other_accidents'
                         ]:
                             phase_vehicle_count[phase] += 1
-                            
-        # 返回车辆数最多的相位
+        
+        # 减少二次排队逻辑：如果当前相位有车辆排队且小于最大绿灯时间，继续当前相位
+        if current_phase is not None and phase_duration < MAX_GREEN_TIME:
+            # 检查当前相位是否还有排队车辆
+            if phase_vehicle_count.get(current_phase, 0) > 1:
+                return current_phase
+        
+        # 否则返回车辆数最多的相位
         return max(phase_vehicle_count, key=phase_vehicle_count.get)

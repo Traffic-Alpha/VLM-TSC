@@ -97,12 +97,31 @@ def main(cfg: DictConfig):
     dones = False
     # 初始化环境
     rl_state, infos = tsc_env.reset()
-    
+
     # 初始化专家决策
     expert_decision = ExpertTrafficSignalController(tls_id=JUNCTION_NAME, raw_infos=infos) 
-    
+
+    # 记录相位和持续时间
+    current_phase = None  # 当前相位
+    phase_duration = 0    # 当前相位持续时间（秒）
+    GREEN_TIME_STEP = 5   # 每步绿灯时间（秒）
+
     while not dones:
-        decision = expert_decision.decide(infos['state']['vehicle'])
+        decision = expert_decision.decide(
+            vehicle_info=infos['state']['vehicle'],
+            current_phase=current_phase,
+            phase_duration=phase_duration
+        )
+        
+        # 更新相位和持续时间
+        if decision == current_phase:
+            # 相位未改变，累加持续时间
+            phase_duration += GREEN_TIME_STEP
+        else:
+            # 相位改变，重置持续时间
+            current_phase = decision
+            phase_duration = GREEN_TIME_STEP  # 重置为一个时间步长
+        
         rl_state, rewards, truncated, dones, infos = tsc_env.step(action=decision)
 
     # 存储全局信息
